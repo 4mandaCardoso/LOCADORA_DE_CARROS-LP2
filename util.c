@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "util.h"
+
+static int id_cliente_atual = 1;
+static int id_carro_atual = 1;
+static int id_aluguel_atual = 1;
 
 Lista *criarLista()
 {
@@ -14,6 +19,7 @@ Lista *criarLista()
     }
 
     lista->cabeca = NULL;
+    lista->cauda = NULL;
 
     return lista;
 }
@@ -24,7 +30,7 @@ int listaVazia(Lista *lista)
     if(lista == NULL)
         return 1;
 
-    return (lista->cabeca == NULL);
+    return (lista->cabeca == NULL && lista->cauda == NULL);
 }
 
 void inserirInicio(Lista *lista, void *dado)
@@ -42,6 +48,16 @@ void inserirInicio(Lista *lista, void *dado)
 
     novo->dado = dado;
     novo->prox = lista->cabeca;
+    novo->ant = NULL; // ant recebe NULL, pois será o primeiro nó da lista
+
+    if(lista->cabeca == NULL)
+    {
+        lista->cauda = novo;
+    }
+    else
+    {
+        lista->cabeca->ant = novo;
+    }
 
     lista->cabeca = novo;
 }
@@ -61,27 +77,21 @@ void inserirFinal(Lista *lista, void *dado)
 
     novo->dado = dado;
     novo->prox = NULL;
+   novo->ant = lista->cauda;
 
-    /* Lista vazia */
-    if(lista->cabeca == NULL)
+    if(lista->cauda == NULL) // se a Lista estava vazia
     {
         lista->cabeca = novo;
-        return;
     }
-
-    No *aux = lista->cabeca;
-
-    while(aux->prox != NULL)
+    else
     {
-        aux = aux->prox;
+        lista->cauda->prox = novo;
     }
+    lista->cauda = novo;
 
-    aux->prox = novo;
 }
 
-void *buscar(Lista *lista,
-             void *chave,
-             int (*comparar)(void *, void *))
+void *buscar(Lista *lista,void *chave,int (*comparar)(void *, void *))
 {
     if(lista == NULL)
         return NULL;
@@ -98,33 +108,35 @@ void *buscar(Lista *lista,
         aux = aux->prox;
     }
 
-    return NULL;
+    return NULL; // significa que não encontrou o dado na lista, logo o dado não existe na lista ainda
 }
 
 
-int remover(Lista *lista,
-            void *chave,
-            int (*comparar)(void *, void *))
+int remover(Lista *lista, void *chave, int (*comparar)(void *, void *))
 {
     if(lista == NULL)
         return 0;
 
     No *atual = lista->cabeca;
-    No *anterior = NULL;
 
     while(atual != NULL)
     {
         if(comparar(atual->dado, chave))
         {
             /* Remove o primeiro nó */
-            if(anterior == NULL)
+            if(atual->ant == NULL)
             {
                 lista->cabeca = atual->prox;
             }
             else
             {
-                anterior->prox = atual->prox;
+                atual->ant->prox = atual->prox;
             }
+
+            if(atual->prox == NULL) // faz ponteiro da cauda apontar para o nó anterior
+                lista->cauda = atual->ant;
+            else 
+                atual->prox->ant = atual->ant;
 
             free(atual->dado);
             free(atual);
@@ -132,8 +144,7 @@ int remover(Lista *lista,
             return 1;
         }
 
-        anterior = atual;
-        atual = atual->prox;
+        atual = atual->prox; // faz o ponteiro atual apontar para o próximo nó
     }
 
     return 0;
@@ -158,6 +169,7 @@ void destruirLista(Lista *lista)
     }
 
     lista->cabeca = NULL;
+    lista->cauda = NULL;
 
     free(lista);
 }
@@ -209,6 +221,7 @@ void salvarLista(Lista *lista, char arquivo[], size_t tamanho)
     }
 
     fclose(file);
+
     printf("Dados salvos com sucesso em '%s'.\n", arquivo);
 }
 
@@ -271,6 +284,17 @@ void pausar()
     while ((c = getchar()) != '\n' && c != EOF); 
 }
 
+void limparBuffer()
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF); 
+}
+
+void remover_quebra_linha(char *dadoRecebido)
+{
+        dadoRecebido[strcspn(dadoRecebido, "\n")] = '\0'; // strcspn retorna o índice do primeiro caractere encontrado na string "\n", e substituímos esse caractere por '\0' para remover a quebra de linha
+        // caso ele não encontre a quebra de linha, strcspn retorna o tamanho da string, e nesse caso, não há alteração na string
+}
 
 int gerarID(TipoLista tipo)
 {
