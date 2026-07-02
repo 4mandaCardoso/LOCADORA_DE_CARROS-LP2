@@ -1,32 +1,25 @@
-#include "menu.h"
-#include "clientes.h"
-#include "carros.h"
-#include "aluguel.h"
+﻿#include "menu.h"
 #include "util.h"
-#include <stdio.h>
-
+#include "locacao.h"
+#include "relatorio.h"
 
 int main() {
-    // Cria a lista principal
     Lista *lista_clientes = criarLista();
+    Lista *lista_carros = criarLista();
+    Lista *lista_locacoes = criarLista();
 
-    printf("=== TESTE DO SISTEMA DA LOCADORA ===\n");
+    carregar_dados_sistema(lista_clientes, lista_carros, lista_locacoes);
+    iniciar_sistema(lista_clientes, lista_carros, lista_locacoes);
 
-    // Testa a função  de criar
-    cadastrar_cliente(lista_clientes);
-    
-    // Lista para ver se guardou certpo
-    listar_clientes(lista_clientes);
+    salvarListaBinarioETxt(lista_clientes, DADOS_CLIENTES_BIN, DADOS_CLIENTES_TXT, sizeof(Cliente), TIPO_CLIENTE);
+    salvarListaBinarioETxt(lista_carros, DADOS_CARROS_BIN, DADOS_CARROS_TXT, sizeof(Carro), TIPO_CARRO);
+    salvar_locacoes_bin(lista_locacoes, DADOS_LOCACOES_BIN);
+    salvarLista_txt(lista_locacoes, DADOS_LOCACOES_TXT, sizeof(Aluguel), TIPO_ALUGUEL);
+    gerar_relatorio(lista_locacoes, lista_clientes, lista_carros);
 
-    
-    buscar_cliente(lista_clientes);
-
-    atualizar_cliente(lista_clientes);
-
-    remover_cliente(lista_clientes);
-
-    // Limpa a memória no fim
     destruirLista(lista_clientes);
+    destruirLista(lista_carros);
+    destruirLista(lista_locacoes);
 
     return 0;
 }

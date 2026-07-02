@@ -50,12 +50,11 @@ void cadastrar_cliente(Lista *lista_clientes)
 
     novo->id = gerarID(TIPO_CLIENTE);
 
-    // Consome qualquer lixo do buffer do teclado antes de ler strings
-    limparBuffer(); 
+    printf("\n--- CADASTRAR CLIENTE ---\n");
 
-        printf("Digite seu nome: ");
-        fgets(novo->nome, TAM_NOME, stdin);
-        remover_quebra_linha(novo->nome); 
+    printf("Digite seu nome: ");
+    fgets(novo->nome, TAM_NOME, stdin);
+    remover_quebra_linha(novo->nome);
         
     while (strspn(novo->nome, "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ") != strlen(novo->nome) || strlen(novo->nome) == 0)
     {
@@ -101,7 +100,7 @@ void cadastrar_cliente(Lista *lista_clientes)
     // Insere na lista duplamente encadeada genérica
     inserirFinal(lista_clientes, novo);
 
-    printf("\nCliente cadastrado no sistema com sucesso! ID gerado: %d\n", novo->id);
+    printf("\nCliente cadastrado no sistema com sucesso! ID gerado: %03d\n", novo->id);
 }
 
 void listar_clientes(Lista *lista_clientes)
@@ -157,7 +156,7 @@ void remover_cliente(Lista *lista_clientes)
         printf("Nenhum cliente cadastrado no sistema para remover.\n");
         return;
     }
-     
+    printf("\n--- REMOVER CLIENTE ---\n");
 
     char cpf_busca[TAM_CPF];
     printf("Digite o CPF do cliente que deseja remover: ");
@@ -185,6 +184,14 @@ void remover_cliente(Lista *lista_clientes)
             {
                 printf("\nCliente removido com sucesso do sistema!\n");
             }
+            else
+            {
+                printf("\nNao foi possivel remover o cliente.\n");
+            }
+        }
+        else
+        {
+            printf("\nOperacao cancelada. Nenhum cliente foi removido.\n");
         }
     }
     else
@@ -248,15 +255,14 @@ void atualizar_cliente(Lista *lista_clientes)
             // verifica se o cliente é maior de idade, se não for, não permitir o cadastro
             int idade = atoi(cliente_atualizar->idade);
                 if (idade < 18)
-                {   
-                     printf("\nERRO: O cliente deve ser maior de idade (18+) para ser cadastrado.\n");
-                    free(cliente_atualizar);
+                {
+                    printf("\nERRO: O cliente deve ser maior de idade (18+) para ser cadastrado.\n");
                     pausar();
                     return;
                 }
 
-
         printf("\nCliente atualizado com sucesso!\n");
+        salvarListaBinarioETxt(lista_clientes, DADOS_CLIENTES_BIN, DADOS_CLIENTES_TXT, sizeof(Cliente), TIPO_CLIENTE);
 
     } else
     

@@ -1,3 +1,6 @@
+#ifndef CARROS_H
+#define CARROS_H
+
 #include "util.h"
 
 typedef struct {
@@ -10,5 +13,8 @@ typedef struct {
 
 int comparar_carro_id(void *dado, void *chave);
 void cadastrar_carro(Lista *frota);
+void deletar_Carros(Lista *frota);
 void listar_frota(Lista *frota);
 void liberar_frota(Lista *frota);
+
+#endif // CARROS_H

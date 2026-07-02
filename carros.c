@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "carro.h"
-#include "util.h" 
+#include "carros.h"
+#include "util.h"
 
 int comparar_carro_id(void *dado, void *chave) {
     Carro *c = (Carro *)dado;
@@ -35,7 +35,31 @@ void cadastrar_carro(Lista *frota) {
 
     inserirFinal(frota, novo_carro);
     
-    printf("Carro cadastrado com sucesso!\n");
+    printf("\nCarro cadastrado com sucesso! ID: %d\n", novo_carro->id);
+}
+
+void deletar_Carros(Lista *frota) {
+    if (listaVazia(frota)) {
+        printf("\nNenhum carro cadastrado para remover.\n");
+        return;
+    }
+
+    listar_frota(frota);
+    int id_busca;
+
+    printf("\nDigite o ID do carro que deseja remover: ");
+    if (scanf("%d", &id_busca) != 1) {
+        limparBuffer();
+        printf("ID invalido. Operacao cancelada.\n");
+        return;
+    }
+    limparBuffer();
+
+    if (remover(frota, &id_busca, comparar_carro_id)) {
+        printf("Carro removido com sucesso!\n");
+    } else {
+        printf("Carro com ID %d nao encontrado.\n", id_busca);
+    }
 }
 
 void listar_frota(Lista *frota) {

@@ -1,17 +1,38 @@
-#include "carro.h"
-#include "cliente.h"
+#ifndef LOCACAO_H
+#define LOCACAO_H
 
-typedef struct{
-    int id_locacao;
-    Carro *carro_alugado; //  -> carro que será alugado
-    Cliente *cliente_locador; // -> cliente que está alugando
+#include "util.h"
+#include "carros.h"
+#include "clientes.h"
+#include <time.h>
+
+#define TAM_DATA_HORA 20
+#define TAM_STATUS 20
+
+#define STATUS_ATIVO 1
+#define STATUS_ENCERRADO 0
+
+typedef struct Aluguel {
+    int id;
+    Cliente *cliente_locador;
+    Carro *carro_alugado;
+    char dataHoraRetirada[TAM_DATA_HORA];
+    char dataHoraDevolucao[TAM_DATA_HORA];
+    time_t tempoRetirada;
+    time_t tempoDevolucao;
     int dias;
-    float valor_t;
-} Locacao;
+    float valorTotal;
+    int status;
+    int idCliente;
+    int idCarro;
+} Aluguel;
 
-Locacao* criar_locacao(int qtd);
-void realizar_locacao(Locacao *historico, int indice, Carro *frota, int qtd_carros, Cliente *cliente, int qtd_clientes);
-void realizar_devolucao(Locacao *historico, int qtd_locacoes);
-void listar_locacao(Locacao *historico, int qtd_locacoes);
-void liberar_locacao(Locacao *historico);
-void gerar_relatorio(Cliente *clientes, int qtd_clientes, Carro *frota, int qtd_carros, Locacao *historico, int qtd_locacoes);
+void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frota);
+void realizar_devolucao(Lista *historico);
+void listar_locacoes(Lista *historico);
+void salvar_locacoes_bin(Lista *historico, const char *arquivo_bin);
+void carregar_locacoes_bin(Lista *historico, const char *arquivo_bin);
+void reconstruir_relacoes_locacoes(Lista *historico, Lista *lista_clientes, Lista *lista_frota);
+void liberar_locacoes(Lista *historico);
+
+#endif // LOCACAO_H
