@@ -23,6 +23,7 @@ int validar_cpf(Lista *lista_clientes, char *cpf, int id_cliente_atual)
     if (strlen(cpf) != 11 || strspn(cpf, "0123456789") != 11)
     {
         printf("\nERRO: O CPF deve conter exatamente 11 digitos numericos.\n");
+        pausar();
         return 0;
     }
 
@@ -59,6 +60,7 @@ void cadastrar_cliente(Lista *lista_clientes)
     while (strspn(novo->nome, "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ") != strlen(novo->nome) || strlen(novo->nome) == 0)
     {
         printf("\nERRO: O nome deve conter apenas letras e espacos.\n");
+        pausar();
 
         printf("Digite seu nome novamente: ");
         fgets(novo->nome, TAM_NOME, stdin);
@@ -71,6 +73,9 @@ void cadastrar_cliente(Lista *lista_clientes)
         printf("\nDigite seu CPF - (apenas 11 digitos): ");
         fgets(novo->cpf, TAM_CPF, stdin);
         remover_quebra_linha(novo->cpf);
+        if (validar_cpf(lista_clientes, novo->cpf, novo->id) != 1) {
+            pausar();
+        }
     } while (validar_cpf(lista_clientes, novo->cpf, novo->id) != 1);
      
 
@@ -82,6 +87,7 @@ void cadastrar_cliente(Lista *lista_clientes)
     while (strspn(novo->idade, "0123456789") != strlen(novo->idade) || strlen(novo->idade) == 0 || atoi(novo->idade) < 0 || atoi(novo->idade) > 135)
     {
         printf("\nERRO: A idade deve conter apenas digitos numericos.\n");
+        pausar();
 
         printf("Digite sua idade novamente: ");
         fgets(novo->idade, TAM_IDADE, stdin);
@@ -94,7 +100,6 @@ void cadastrar_cliente(Lista *lista_clientes)
     {
         printf("\nERRO: O cliente deve ser maior de idade (18+) para ser cadastrado.\n");
         free(novo);
-        pausar();
         return;
     }
     // Insere na lista duplamente encadeada genérica
@@ -227,6 +232,7 @@ void atualizar_cliente(Lista *lista_clientes)
              while (strspn(cliente_atualizar->nome, "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ") != strlen(cliente_atualizar->nome) || strlen(cliente_atualizar->nome) == 0)
             {
                  printf("\nERRO: O nome deve conter apenas letras e espacos.\n");
+                 pausar();
 
                  printf("Digite seu nome novamente: ");
                  fgets(cliente_atualizar->nome, TAM_NOME, stdin);
@@ -237,6 +243,9 @@ void atualizar_cliente(Lista *lista_clientes)
                 printf("\nDigite seu CPF - (apenas 11 digitos): ");
                 fgets(cliente_atualizar->cpf, TAM_CPF, stdin);
                 remover_quebra_linha(cliente_atualizar->cpf);
+                if (validar_cpf(lista_clientes, cliente_atualizar->cpf, cliente_atualizar->id) != 1) {
+                    pausar();
+                }
             } while (validar_cpf(lista_clientes, cliente_atualizar->cpf, cliente_atualizar->id) != 1);
 
         printf("Digite a nova idade (atual: %s): ", cliente_atualizar->idade);
@@ -246,6 +255,7 @@ void atualizar_cliente(Lista *lista_clientes)
             while (strspn(cliente_atualizar->idade, "0123456789") != strlen(cliente_atualizar->idade) || strlen(cliente_atualizar->idade) == 0)
             {
                 printf("\nERRO: A idade deve conter apenas digitos numericos.\n");
+                pausar();
 
                 printf("Digite sua idade novamente: ");
                 fgets(cliente_atualizar->idade, TAM_IDADE, stdin);
@@ -257,17 +267,16 @@ void atualizar_cliente(Lista *lista_clientes)
                 if (idade < 18)
                 {
                     printf("\nERRO: O cliente deve ser maior de idade (18+) para ser cadastrado.\n");
-                    pausar();
                     return;
                 }
 
         printf("\nCliente atualizado com sucesso!\n");
-        salvarListaBinarioETxt(lista_clientes, DADOS_CLIENTES_BIN, DADOS_CLIENTES_TXT, sizeof(Cliente), TIPO_CLIENTE);
-
+        pausar();
     } else
     
     {
         printf("\nCliente com o CPF '%s' nao foi encontrado no sistema.\n", cpf_busca);
+        pausar();
     }
 
 }    

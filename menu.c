@@ -112,7 +112,7 @@ void menu_gerenciar_alugueis(Lista *lista_clientes, Lista *lista_carros, Lista *
             }
             listar_clientes(lista_clientes);
             listar_frota(lista_carros);
-            realizar_locacao(lista_locacoes, lista_clientes, lista_carros); pausar(); break;
+            realizar_locacao(lista_locacoes, lista_clientes, lista_carros, NULL); pausar(); break;
             case 3: realizar_devolucao(lista_locacoes); pausar(); break;
             case 0: break;
             default: printf("Opcao invalida!\n"); pausar();
@@ -208,7 +208,7 @@ void menu_cliente_logado(Cliente *cliente, Lista *lista_clientes, Lista *lista_c
                 }
                 listar_frota(lista_carros);
                 printf("\n--- Solicitar Locacao ---\n");
-                realizar_locacao(lista_locacoes, lista_clientes, lista_carros);
+                realizar_locacao(lista_locacoes, lista_clientes, lista_carros, cliente);
                 pausar();
                 break;
             case 2: 
@@ -274,7 +274,7 @@ void menu_login_cliente(Lista *lista_clientes, Lista *lista_carros, Lista *lista
                 if (logado != NULL) {
                     menu_cliente_logado(logado, lista_clientes, lista_carros, lista_locacoes);
                 } else {
-                    printf("\nCPF nao encontrado. Tente novamente ou cadastre-se.\n");
+                    printf("\nERRO: CPF nao encontrado. Verifique o CPF ou cadastre-se como novo cliente.\n");
                     pausar();
                 }
             } else if (opcao == 2) {

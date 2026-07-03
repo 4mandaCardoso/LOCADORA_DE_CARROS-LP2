@@ -36,6 +36,23 @@ static Carro *buscar_carro_por_id(Lista *lista_frota, int id) {
     return NULL;
 }
 
+static int contar_carros_disponiveis(Lista *lista_frota) {
+    if (lista_frota == NULL) {
+        return 0;
+    }
+
+    int contagem = 0;
+    No *aux = lista_frota->cabeca;
+    while (aux != NULL) {
+        Carro *carro = (Carro *) aux->dado;
+        if (carro != NULL && carro->disponivel == 1) {
+            contagem++;
+        }
+        aux = aux->prox;
+    }
+    return contagem;
+}
+
 static Aluguel *buscar_aluguel_por_id(Lista *historico, int id) {
     if (historico == NULL) {
         return NULL;
@@ -71,49 +88,70 @@ static void atualizar_status_locacoes(Lista *historico) {
     }
 }
 
-void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frota) {
+void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frota, Cliente *cliente_logado) {
     if (historico == NULL || lista_clientes == NULL || lista_frota == NULL) {
         printf("Erro: Listas invalidas para realizar locacao.\n");
         return;
     }
 
-    char cpf_cliente[TAM_CPF];
-    int id_carro;
-    int dias;
-
-    printf("Digite o CPF do cliente: ");
-    scanf("%14s", cpf_cliente);
-
-    Cliente *cliente = (Cliente *) buscar(lista_clientes, cpf_cliente, compara_cliente_cpf);
-    if (cliente == NULL) {
-        printf("Erro: Cliente com CPF %s nao encontrado!\n", cpf_cliente);
-        return;
+    int carros_disponiveis = contar_carros_disponiveis(lista_frota);
+    if (carros_disponiveis == 0) {
+        printf("\nErro: Nenhum carro disponivel para locacao no momento. Tente mais tarde!\n");
+        return; 
     }
+
+    Cliente *cliente = NULL;
+
+    if (cliente_logado != NULL) {
+
+        cliente = cliente_logado;
+        printf("Cliente: %s (CPF: %s)\n", cliente->nome, cliente->cpf);
+    } else {
+        // Se for o Administrador (passou NULL), pedimos o CPF
+        char cpf_cliente[TAM_CPF];
+        printf("Digite o CPF do cliente: ");
+        scanf("%14s", cpf_cliente);
+        limparBuffer();
+
+        cliente = (Cliente *) buscar(lista_clientes, cpf_cliente, compara_cliente_cpf);
+        if (cliente == NULL) {
+            printf("Erro: Cliente com CPF %s nao encontrado!\n", cpf_cliente);
+            return; 
+        }
+    }
+
+    int id_carro, dias;
 
     printf("Digite o ID do carro que deseja alugar: ");
     scanf("%d", &id_carro);
+    limparBuffer();
 
     Carro *carro = buscar_carro_por_id(lista_frota, id_carro);
     if (carro == NULL) {
         printf("Erro: Carro com ID %d nao encontrado!\n", id_carro);
+        pausar();
         return;
     }
 
     if (carro->disponivel == 0) {
         printf("Erro: O carro '%s' ja esta alugado!\n", carro->modelo);
+        pausar();
         return;
     }
 
     printf("Digite a quantidade de dias da locacao: ");
     scanf("%d", &dias);
+    limparBuffer();
     if (dias <= 0) {
         printf("Erro: A quantidade de dias deve ser maior que zero.\n");
+        pausar();
         return;
     }
 
     Aluguel *novo = (Aluguel *) malloc(sizeof(Aluguel));
     if (novo == NULL) {
         printf("Erro ao alocar memoria para a locacao!\n");
+        pausar();
         return;
     }
 
@@ -148,6 +186,8 @@ void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frot
     printf("Valor Total: R$ %.2f\n", novo->valorTotal);
     printf("Retirada: %s\n", novo->dataHoraRetirada);
     printf("Devolucao prevista: %s\n", novo->dataHoraDevolucao);
+    printf("\nLocacao confirmada e salva no sistema!\n");
+
 }
 
 void realizar_devolucao(Lista *historico) {
@@ -165,11 +205,13 @@ void realizar_devolucao(Lista *historico) {
     Aluguel *aluguel = buscar_aluguel_por_id(historico, id_loc);
     if (aluguel == NULL) {
         printf("Erro: Locacao com ID %d nao encontrada!\n", id_loc);
+        pausar();
         return;
     }
 
     if (aluguel->status == STATUS_ENCERRADO) {
-        printf("Aviso: Esta locacao ja esta encerrada.\n");
+        printf("Aviso: Esta locacao ja esta encerrada. Nao e possivel fazer a devolucao novamente.\n");
+        pausar();
         return;
     }
 
@@ -178,6 +220,7 @@ void realizar_devolucao(Lista *historico) {
         aluguel->carro_alugado->disponivel = 1;
     }
     printf(">>> Devolucao do carro '%s' realizada com sucesso! <<<\n", aluguel->carro_alugado ? aluguel->carro_alugado->modelo : "(carro desconhecido)");
+    printf("Devolucao confirmada e salva no sistema!\n");
 }
 
 void listar_locacoes(Lista *historico) {

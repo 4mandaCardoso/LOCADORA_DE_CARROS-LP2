@@ -280,17 +280,15 @@ void salvarLista_txt(Lista *lista, const char *arquivo_txt, size_t tamanho, int 
             Aluguel *aluguel = (Aluguel *) aux->dado;
             if(aluguel != NULL)
             {
-                fprintf(file, "%d;%d;%d;%s;%s;%ld;%ld;%d;%.2f;%d\n",
+                fprintf(file, "ID Locacao: %d | Cliente ID: %d | Carro ID: %d | Retirada: %s | Devolucao: %s | Dias: %d | Valor Total: R$ %.2f | Status: %s\n",
                         aluguel->id,
                         aluguel->idCliente,
                         aluguel->idCarro,
                         aluguel->dataHoraRetirada,
                         aluguel->dataHoraDevolucao,
-                        (long)aluguel->tempoRetirada,
-                        (long)aluguel->tempoDevolucao,
                         aluguel->dias,
                         aluguel->valorTotal,
-                        aluguel->status);
+                        aluguel->status == 1 ? "Ativo" : "Encerrado");
             }
         }
         aux = aux->prox;

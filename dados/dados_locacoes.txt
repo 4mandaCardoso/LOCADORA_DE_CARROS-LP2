@@ -1,1 +1,2 @@
-1;2;1;04/07/2026 18:37;04/07/2026 18:37;1783028230;1783201030;2;400.00;0
+ID Locacao: 1 | Cliente ID: 2 | Carro ID: 1 | Retirada: 04/07/2026 18:37 | Devolucao: 04/07/2026 18:37 | Dias: 2 | Valor Total: R$ 400.00 | Status: Encerrado
+ID Locacao: 2 | Cliente ID: 1 | Carro ID: 1 | Retirada: 02/07/2026 20:49:27 | Devolucao: 04/07/2026 20:49:27 | Dias: 2 | Valor Total: R$ 400.00 | Status: Encerrado

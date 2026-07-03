@@ -27,7 +27,7 @@ typedef struct Aluguel {
     int idCarro;
 } Aluguel;
 
-void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frota);
+void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frota, Cliente *cliente_logado);
 void realizar_devolucao(Lista *historico);
 void listar_locacoes(Lista *historico);
 void salvar_locacoes_bin(Lista *historico, const char *arquivo_bin);
@@ -36,3 +36,5 @@ void reconstruir_relacoes_locacoes(Lista *historico, Lista *lista_clientes, List
 void liberar_locacoes(Lista *historico);
 
 #endif // LOCACAO_H
+
+

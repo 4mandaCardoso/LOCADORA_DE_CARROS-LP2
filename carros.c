@@ -36,6 +36,7 @@ void cadastrar_carro(Lista *frota) {
     inserirFinal(frota, novo_carro);
     
     printf("\nCarro cadastrado com sucesso! ID: %d\n", novo_carro->id);
+    pausar();
 }
 
 void deletar_Carros(Lista *frota) {
@@ -55,10 +56,33 @@ void deletar_Carros(Lista *frota) {
     }
     limparBuffer();
 
-    if (remover(frota, &id_busca, comparar_carro_id)) {
-        printf("Carro removido com sucesso!\n");
-    } else {
+    // Buscar o carro para exibir informações antes de remover
+    Carro *carro_remover = (Carro *) buscar(frota, &id_busca, comparar_carro_id);
+    if (carro_remover == NULL) {
         printf("Carro com ID %d nao encontrado.\n", id_busca);
+        return;
+    }
+
+    printf("\nCarro encontrado:\n");
+    printf("ID: %d | Modelo: %s | Placa: %s | Diaria: R$ %.2f\n",
+           carro_remover->id, carro_remover->modelo, carro_remover->placa, carro_remover->diaria);
+
+    char opcao;
+    printf("\nTem certeza que deseja remover este carro da frota? (S/N): ");
+    scanf(" %c", &opcao);
+    limparBuffer();
+
+    if (opcao == 'S' || opcao == 's') {
+        if (remover(frota, &id_busca, comparar_carro_id)) {
+            printf("\nCarro removido com sucesso da frota!\n");
+            pausar();
+        } else {
+            printf("\nErro ao remover carro.\n");
+            pausar();
+        }
+    } else {
+        printf("\nOperacao cancelada. Nenhum carro foi removido.\n");
+        pausar();
     }
 }
 
@@ -87,5 +111,6 @@ void liberar_frota(Lista *frota) {
     if (frota != NULL) {
         destruirLista(frota);
         printf("\nMemoria da frota liberada com sucesso!\n");
+        
     }
 }
