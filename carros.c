@@ -30,13 +30,13 @@ void cadastrar_carro(Lista *frota) {
 
     printf("Preco da Diaria: ");
     scanf("%f", &novo_carro->diaria);
+    limparBuffer();
 
     novo_carro->disponivel = 1;
 
     inserirFinal(frota, novo_carro);
     
     printf("\nCarro cadastrado com sucesso! ID: %d\n", novo_carro->id);
-    pausar();
 }
 
 void deletar_Carros(Lista *frota) {
@@ -75,14 +75,14 @@ void deletar_Carros(Lista *frota) {
     if (opcao == 'S' || opcao == 's') {
         if (remover(frota, &id_busca, comparar_carro_id)) {
             printf("\nCarro removido com sucesso da frota!\n");
-            pausar();
+            
         } else {
             printf("\nErro ao remover carro.\n");
-            pausar();
+            
         }
     } else {
         printf("\nOperacao cancelada. Nenhum carro foi removido.\n");
-        pausar();
+        
     }
 }
 

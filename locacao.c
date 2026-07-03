@@ -129,13 +129,11 @@ void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frot
     Carro *carro = buscar_carro_por_id(lista_frota, id_carro);
     if (carro == NULL) {
         printf("Erro: Carro com ID %d nao encontrado!\n", id_carro);
-        pausar();
         return;
     }
 
     if (carro->disponivel == 0) {
         printf("Erro: O carro '%s' ja esta alugado!\n", carro->modelo);
-        pausar();
         return;
     }
 
@@ -144,14 +142,12 @@ void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frot
     limparBuffer();
     if (dias <= 0) {
         printf("Erro: A quantidade de dias deve ser maior que zero.\n");
-        pausar();
         return;
     }
 
     Aluguel *novo = (Aluguel *) malloc(sizeof(Aluguel));
     if (novo == NULL) {
         printf("Erro ao alocar memoria para a locacao!\n");
-        pausar();
         return;
     }
 
@@ -201,17 +197,16 @@ void realizar_devolucao(Lista *historico) {
     int id_loc;
     printf("Digite o ID da locacao que deseja encerrar (Devolucao): ");
     scanf("%d", &id_loc);
+    limparBuffer();
 
     Aluguel *aluguel = buscar_aluguel_por_id(historico, id_loc);
     if (aluguel == NULL) {
         printf("Erro: Locacao com ID %d nao encontrada!\n", id_loc);
-        pausar();
         return;
     }
 
     if (aluguel->status == STATUS_ENCERRADO) {
         printf("Aviso: Esta locacao ja esta encerrada. Nao e possivel fazer a devolucao novamente.\n");
-        pausar();
         return;
     }
 

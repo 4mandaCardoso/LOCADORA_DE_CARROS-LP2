@@ -51,8 +51,8 @@ void menu_gerenciar_clientes(Lista *lista_clientes) {
         switch (opcao) {
             case 1: listar_clientes(lista_clientes); pausar(); break;
             case 2: cadastrar_cliente(lista_clientes); pausar(); break;
-            case 3: atualizar_cliente(lista_clientes); pausar(); break;
-            case 4: remover_cliente(lista_clientes); pausar(); break;
+            case 3: atualizar_cliente(lista_clientes); pausar(); limparTela(); break;
+            case 4: remover_cliente(lista_clientes); pausar(); limparTela(); break;
             case 0: break;
             default: printf("Opcao invalida!\n"); pausar();
         }

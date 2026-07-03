@@ -1,6 +1,8 @@
 
 #include "clientes.h"
 #include "util.h"
+#include "menu.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,7 +28,7 @@ int validar_cpf(Lista *lista_clientes, char *cpf, int id_cliente_atual)
         pausar();
         return 0;
     }
-
+    
     //Verifica se o CPF já está cadastrado no sistema para outro cliente
     Cliente *duplicado = (Cliente *) buscar(lista_clientes, cpf, compara_cliente_cpf);
     
@@ -34,10 +36,41 @@ int validar_cpf(Lista *lista_clientes, char *cpf, int id_cliente_atual)
     if (duplicado != NULL && duplicado->id != id_cliente_atual)
     {
         printf("\nERRO: Este CPF ja esta cadastrado no sistema para outro cliente.\n");
+        pausar();
+        return 0;
+    }
+    
+    return 1; // Passou em todas as verificações, CPF é válido
+}
+
+int validar_nome(Lista *lista_clientes, char *nome, int id_cliente_atual)
+{
+    // Analisa o tamanho e se contém apenas dígitos
+    if (strlen(nome) == 0 || strspn(nome, "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ") != strlen(nome))
+    {
+        printf("\nERRO: O nome deve conter apenas letras e espacos.\n");
+        pausar();
+        // menu_gerenciar_clientes(lista_clientes); 
+       
+        // eu quero que apos o enter do pausar ele limpe a tela, para que o usuario possa digitar novamente o nome, mas n suma com o menu superior. O QUE FAZER?
         return 0;
     }
 
-    return 1; // Passou em todas as verificações, CPF é válido
+
+    return 1; // Passou em todas as verificações, nome é válido
+}
+
+int validar_idade(Lista *lista_clientes, char *idade, int id_cliente_atual)
+{
+    // Analisa o tamanho e se contém apenas dígitos
+    if (strlen(idade) == 0 || strspn(idade, "0123456789") != strlen(idade) || atoi(idade) < 18 || atoi(idade) > 135)
+    {
+        printf("\nERRO: A idade deve conter apenas digitos numericos e idades entre 18 e 135.\n");
+        pausar();
+        return 0;
+    }
+
+    return 1; // Passou em todas as verificações, idade é de fato apenas numeros
 }
 
 void cadastrar_cliente(Lista *lista_clientes)
@@ -45,7 +78,8 @@ void cadastrar_cliente(Lista *lista_clientes)
     Cliente *novo = (Cliente *) malloc(sizeof(Cliente));
     if (novo == NULL)
     {
-        printf("nERRO: Erro ao alocar memoria para o novo cliente!\n");
+        printf("\nERRO: Erro ao alocar memoria para o novo cliente!\n");
+        pausar();
         return;
     }
 
@@ -53,60 +87,73 @@ void cadastrar_cliente(Lista *lista_clientes)
 
     printf("\n--- CADASTRAR CLIENTE ---\n");
 
-    printf("Digite seu nome: ");
-    fgets(novo->nome, TAM_NOME, stdin);
-    remover_quebra_linha(novo->nome);
+    // === NOME ===
+    int erro_nome = 0;
+    do {
+        if (erro_nome > 0) {
+            // Sobe exatamente 6 linhas (compensando os \n do erro e do pausar) e apaga tudo para baixo
+            printf("\033[6A\033[J"); 
+            erro_nome = 0; // Resetando o contador de erros para evitar loop infinito
+        }
         
-    while (strspn(novo->nome, "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ") != strlen(novo->nome) || strlen(novo->nome) == 0)
-    {
-        printf("\nERRO: O nome deve conter apenas letras e espacos.\n");
-        pausar();
-
-        printf("Digite seu nome novamente: ");
+        printf("Digite seu nome: ");
+        fflush(stdout); 
         fgets(novo->nome, TAM_NOME, stdin);
         remover_quebra_linha(novo->nome);
-    }
+        
+        // Se a validação retornar 1 (sucesso), ele dá um break e sai do loop
+        if (validar_nome(lista_clientes, novo->nome, novo->id) == 1) {
+            break;
+        }
+        erro_nome++; // Se chegou aqui, é porque falhou. Registra o erro para limpar na próxima volta!
+    } while (1);
 
 
-    //avalia se o CPF ja esta cadastrado no sistema, se estiver, não permitir o cadastro
-     do {
-        printf("\nDigite seu CPF - (apenas 11 digitos): ");
+    // === CPF ===
+    int erro_cpf = 0;
+    do {
+        if (erro_cpf > 0) {
+            printf("\033[6A\033[J");
+            erro_cpf = 0; // Resetando o contador de erros para evitar loop infinito
+        }
+        
+        printf("Digite seu CPF (apenas 11 digitos): ");
+        fflush(stdout); 
         fgets(novo->cpf, TAM_CPF, stdin);
         remover_quebra_linha(novo->cpf);
-        if (validar_cpf(lista_clientes, novo->cpf, novo->id) != 1) {
-            pausar();
+        
+        if (validar_cpf(lista_clientes, novo->cpf, novo->id) == 1) {
+            break;
         }
-    } while (validar_cpf(lista_clientes, novo->cpf, novo->id) != 1);
+        erro_cpf++;
+    } while (1);
      
 
-    printf("\nDigite sua idade: ");
-    fgets(novo->idade, TAM_IDADE, stdin);
-    remover_quebra_linha(novo->idade);
-
-    // Avalia se a idade está no formato correto(apenas digitos), se não estiver, não permitir o cadastro
-    while (strspn(novo->idade, "0123456789") != strlen(novo->idade) || strlen(novo->idade) == 0 || atoi(novo->idade) < 0 || atoi(novo->idade) > 135)
-    {
-        printf("\nERRO: A idade deve conter apenas digitos numericos.\n");
-        pausar();
-
-        printf("Digite sua idade novamente: ");
+    // === IDADE ===
+    int erro_idade = 0;
+    do{
+        if (erro_idade > 0) {
+            printf("\033[6A\033[J"); 
+            erro_idade = 0; // Resetando o contador de erros para evitar loop infinito
+        }
+        
+        printf("Digite sua idade: ");
+        fflush(stdout);
         fgets(novo->idade, TAM_IDADE, stdin);
         remover_quebra_linha(novo->idade);
-    }
+        
+        if (validar_idade(lista_clientes, novo->idade, novo->id) == 1) {
+            break;
+        }
+        erro_idade++;
+    } while (1);
 
-    // verifica se o cliente é maior de idade, se não for, não permitir o cadastro
-    int idade = atoi(novo->idade);
-    if (idade < 18)
-    {
-        printf("\nERRO: O cliente deve ser maior de idade (18+) para ser cadastrado.\n");
-        free(novo);
-        return;
-    }
-    // Insere na lista duplamente encadeada genérica
     inserirFinal(lista_clientes, novo);
 
     printf("\nCliente cadastrado no sistema com sucesso! ID gerado: %03d\n", novo->id);
 }
+
+
 
 void listar_clientes(Lista *lista_clientes)
 {
@@ -136,7 +183,7 @@ void buscar_cliente(Lista *lista_clientes)
     }
 
     char cpf_busca[TAM_CPF];
-    printf("Digite o CPF do cliente que deseja buscar: "); 
+    printf("\nDigite o CPF do cliente que deseja buscar: "); 
     fgets(cpf_busca, TAM_CPF, stdin);
     remover_quebra_linha(cpf_busca);
 
@@ -207,77 +254,97 @@ void remover_cliente(Lista *lista_clientes)
 
 void atualizar_cliente(Lista *lista_clientes)
 {
-   if (listaVazia(lista_clientes) == 1)
-   {
-       printf("Nenhum cliente cadastrado no sistema para atualizar.\n");
-       return;
-   }
+    if (listaVazia(lista_clientes) == 1)
+    {
+        printf("\nNenhum cliente cadastrado no sistema para atualizar.\n");
+        return;
+    }
+
+     printf("\n--- ATUALIZAR CLIENTE ---\n");
 
     char cpf_busca[TAM_CPF];
-   printf("Digite o CPF do cliente que deseja atualizar: ");
-   fgets(cpf_busca, TAM_CPF, stdin);
-   remover_quebra_linha(cpf_busca);
+    printf("\nDigite o CPF do cliente que deseja atualizar: ");
+    fgets(cpf_busca, TAM_CPF, stdin);
+    remover_quebra_linha(cpf_busca);
 
-   Cliente *cliente_atualizar = (Cliente *) buscar(lista_clientes, cpf_busca, compara_cliente_cpf);
+    Cliente *cliente_atualizar = (Cliente *) buscar(lista_clientes, cpf_busca, compara_cliente_cpf);
 
-       if (cliente_atualizar != NULL){
+    if (cliente_atualizar != NULL)
+    {
+        // Variáveis temporárias para total segurança e integridade dos dados
+        char temp_nome[TAM_NOME];
+        char temp_cpf[TAM_CPF];
+        char temp_idade[TAM_IDADE];
 
         printf("\nCliente encontrado pelo sistema. Informe os novos dados:\n");
 
-
-        printf("Digite o novo nome (atual: %s): ", cliente_atualizar->nome);
-        fgets(cliente_atualizar->nome, TAM_NOME, stdin);
-        remover_quebra_linha(cliente_atualizar->nome);
-
-             while (strspn(cliente_atualizar->nome, "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ") != strlen(cliente_atualizar->nome) || strlen(cliente_atualizar->nome) == 0)
-            {
-                 printf("\nERRO: O nome deve conter apenas letras e espacos.\n");
-                 pausar();
-
-                 printf("Digite seu nome novamente: ");
-                 fgets(cliente_atualizar->nome, TAM_NOME, stdin);
-                 remover_quebra_linha(cliente_atualizar->nome);
-             }
-
-            do {
-                printf("\nDigite seu CPF - (apenas 11 digitos): ");
-                fgets(cliente_atualizar->cpf, TAM_CPF, stdin);
-                remover_quebra_linha(cliente_atualizar->cpf);
-                if (validar_cpf(lista_clientes, cliente_atualizar->cpf, cliente_atualizar->id) != 1) {
-                    pausar();
-                }
-            } while (validar_cpf(lista_clientes, cliente_atualizar->cpf, cliente_atualizar->id) != 1);
-
-        printf("Digite a nova idade (atual: %s): ", cliente_atualizar->idade);
-        fgets(cliente_atualizar->idade, TAM_IDADE, stdin);
-        remover_quebra_linha(cliente_atualizar->idade);
-
-            while (strspn(cliente_atualizar->idade, "0123456789") != strlen(cliente_atualizar->idade) || strlen(cliente_atualizar->idade) == 0)
-            {
-                printf("\nERRO: A idade deve conter apenas digitos numericos.\n");
-                pausar();
-
-                printf("Digite sua idade novamente: ");
-                fgets(cliente_atualizar->idade, TAM_IDADE, stdin);
-                remover_quebra_linha(cliente_atualizar->idade);
+        // === NOVO NOME ===
+        int erro_nome = 0;
+        do {
+            if (erro_nome > 0) {
+                printf("\033[6A\033[J"); // Sobe 6 linhas e limpa o rastro do erro
             }
+            
+            printf("Digite o novo nome (atual: %s): ", cliente_atualizar->nome);
+            fflush(stdout);
+            fgets(temp_nome, TAM_NOME, stdin);
+            remover_quebra_linha(temp_nome);
+            
+            if (validar_nome(lista_clientes, temp_nome, cliente_atualizar->id) == 1) {
+                break;
+            }
+            erro_nome++;
+        } while (1);
 
-            // verifica se o cliente é maior de idade, se não for, não permitir o cadastro
-            int idade = atoi(cliente_atualizar->idade);
-                if (idade < 18)
-                {
-                    printf("\nERRO: O cliente deve ser maior de idade (18+) para ser cadastrado.\n");
-                    return;
-                }
+        // === NOVO CPF ===
+        int erro_cpf = 0;
+        do {
+            if (erro_cpf > 0) {
+                printf("\033[6A\033[J"); // Sobe 7 linhas e limpa o rastro do erro
+            }
+            
+            printf("Digite o novo CPF (atual: %s): ", cliente_atualizar->cpf);
+            fflush(stdout);
+            fgets(temp_cpf, TAM_CPF, stdin);
+            remover_quebra_linha(temp_cpf);
+            
+            if (validar_cpf(lista_clientes, temp_cpf, cliente_atualizar->id) == 1) {
+                break;
+            }
+            erro_cpf++;
+        } while (1);
+
+        // === NOVA IDADE ===
+        int erro_idade = 0;
+        do {
+            if (erro_idade > 0) {
+                printf("\033[6A\033[J"); // Sobe 7 linhas e limpa o rastro do erro
+            }
+            
+            printf("Digite a nova idade (atual: %s): ", cliente_atualizar->idade);
+            fflush(stdout);
+            fgets(temp_idade, TAM_IDADE, stdin);
+            remover_quebra_linha(temp_idade);
+            
+            if (validar_idade(lista_clientes, temp_idade, cliente_atualizar->id) == 1) {
+                break;
+            }
+            erro_idade++;
+        } while (1);
+
+        // Se o programa passou de todos os loops com sucesso, consolida a alteração na memória física
+        strcpy(cliente_atualizar->nome, temp_nome);
+        strcpy(cliente_atualizar->cpf, temp_cpf);
+        strcpy(cliente_atualizar->idade, temp_idade);
 
         printf("\nCliente atualizado com sucesso!\n");
-        pausar();
-    } else
-    
+        
+        // Persistência de dados: Salva a lista de clientes atualizada em binário e texto
+        salvarListaBinarioETxt(lista_clientes, DADOS_CLIENTES_BIN, DADOS_CLIENTES_TXT, sizeof(Cliente), TIPO_CLIENTE);
+    } 
+    else
     {
         printf("\nCliente com o CPF '%s' nao foi encontrado no sistema.\n", cpf_busca);
-        pausar();
     }
-
-}    
+}   
 
