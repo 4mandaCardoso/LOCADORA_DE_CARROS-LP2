@@ -186,13 +186,33 @@ void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frot
 
 }
 
-void realizar_devolucao(Lista *historico) {
+void realizar_devolucao(Lista *historico, Cliente *cliente_logado) {
     if (historico == NULL || listaVazia(historico)) {
         printf("Nenhuma locacao registrada no sistema.\n");
         return;
     }
 
     atualizar_status_locacoes(historico);
+
+    // === BLOQUEIO VISUAL ===
+    // verifica se ele tem algum aluguel ATIVO.
+    if (cliente_logado != NULL) {
+        int tem_aluguel_ativo = 0;
+        No *aux = historico->cabeca;
+        while (aux != NULL) {
+            Aluguel *a = (Aluguel *) aux->dado;
+            if (a != NULL && a->idCliente == cliente_logado->id && a->status == STATUS_ATIVO) {
+                tem_aluguel_ativo = 1;
+                break; // Encontrou pelo menos um, pode parar a busca
+            }
+            aux = aux->prox;
+        }
+        
+        // Se ele não tem nada ativo, encerra a função 
+        if (tem_aluguel_ativo == 0) {
+            return;
+        }
+    }
 
     int id_loc;
     printf("Digite o ID da locacao que deseja encerrar (Devolucao): ");
@@ -202,6 +222,13 @@ void realizar_devolucao(Lista *historico) {
     Aluguel *aluguel = buscar_aluguel_por_id(historico, id_loc);
     if (aluguel == NULL) {
         printf("Erro: Locacao com ID %d nao encontrada!\n", id_loc);
+        return;
+    }
+
+    // === BLOQUEIO DE SEGURANÇA ===
+    // Impede que um CLIENTE encerre o aluguel de outra pessoa
+    if (cliente_logado != NULL && aluguel->idCliente != cliente_logado->id) {
+        printf("\nERRO DE SEGURANCA: Esta locacao pertence a outro cliente. Acesso negado!\n");
         return;
     }
 

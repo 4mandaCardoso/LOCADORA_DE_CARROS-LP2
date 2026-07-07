@@ -122,7 +122,7 @@ void menu_gerenciar_alugueis(Lista *lista_clientes, Lista *lista_carros, Lista *
             listar_clientes(lista_clientes);
             listar_frota(lista_carros);
             realizar_locacao(lista_locacoes, lista_clientes, lista_carros, NULL); pausar(); break;
-            case 4: realizar_devolucao(lista_locacoes); pausar(); break;
+            case 4:realizar_devolucao(lista_locacoes, NULL); pausar(); break;
             case 0: break;
             default: printf("Opcao invalida!\n"); pausar();
         }
@@ -231,9 +231,9 @@ void menu_cliente_logado(Cliente *cliente, Lista *lista_clientes, Lista *lista_c
                 break;
             case 4:
                 listar_meus_alugueis(lista_locacoes, cliente->id);
-                realizar_devolucao(lista_locacoes);
+                realizar_devolucao(lista_locacoes, cliente);
                 pausar();
-                break;
+                 break;
             case 0: break;
             default: printf("Opcao invalida!\n"); pausar();
         }

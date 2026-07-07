@@ -5,6 +5,7 @@
 --- CLIENTES CADASTRADOS ---
 ID: 1 | Nome: Vinicius Lopes | idade: 19| CPF: 12345678910
 ID: 2 | Nome: Amanda Cardoso | idade: 21| CPF: 12345678911
+ID: 3 | Nome: Vinicius | idade: 19| CPF: 12345678912
 
 --- FROTA DE CARROS ---
 ID: 1 | Modelo: HB20 | Placa: MQX-8214 | Diaria: R$ 300.00 | Status: Alugado
