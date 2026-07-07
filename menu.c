@@ -51,15 +51,15 @@ void menu_gerenciar_clientes(Lista *lista_clientes) {
         switch (opcao) {
             case 1: listar_clientes(lista_clientes); pausar(); break;
             case 2: cadastrar_cliente(lista_clientes); pausar(); break;
-            case 3: atualizar_cliente(lista_clientes); pausar(); limparTela(); break;
-            case 4: remover_cliente(lista_clientes); pausar(); limparTela(); break;
+            case 3: atualizar_cliente(lista_clientes); pausar(); break;
+            case 4: remover_cliente(lista_clientes); pausar(); break;
             case 0: break;
             default: printf("Opcao invalida!\n"); pausar();
         }
     } while (opcao != 0);
 }
 
-void menu_gerenciar_carros(Lista *lista_carros) {
+void menu_gerenciar_carros(Lista *lista_carros, Lista *lista_locacoes) {
     int opcao;
     do {
         imprimir_cabecalho("Menu de Carros (Admin)");
@@ -76,7 +76,7 @@ void menu_gerenciar_carros(Lista *lista_carros) {
         switch (opcao) {
             case 1: listar_frota(lista_carros); pausar(); break;
             case 2: cadastrar_carro(lista_carros); pausar(); break;
-            case 3: deletar_Carros(lista_carros); pausar(); break;
+            case 3: deletar_Carros(lista_carros, lista_locacoes); pausar(); break;
             case 0: break;
             default: printf("Opcao invalida!\n"); pausar();
         }
@@ -137,7 +137,7 @@ void menu_admin(Lista *lista_clientes, Lista *lista_carros, Lista *lista_locacoe
 
         switch (opcao) {
             case 1: menu_gerenciar_clientes(lista_clientes); break;
-            case 2: menu_gerenciar_carros(lista_carros); break;
+            case 2: menu_gerenciar_carros(lista_carros, lista_locacoes); break;
             case 3: menu_gerenciar_alugueis(lista_clientes, lista_carros, lista_locacoes); break;
             case 4:
                 mostrar_relatorio(lista_locacoes, lista_clientes, lista_carros);
@@ -319,6 +319,7 @@ void iniciar_sistema(Lista *lista_clientes, Lista *lista_carros, Lista *lista_lo
                 salvarListaBinarioETxt(lista_carros, DADOS_CARROS_BIN, DADOS_CARROS_TXT, sizeof(Carro), TIPO_CARRO);
                 salvar_locacoes_bin(lista_locacoes, DADOS_LOCACOES_BIN);
                 salvarLista_txt(lista_locacoes, DADOS_LOCACOES_TXT, sizeof(Aluguel), TIPO_ALUGUEL);
+                gerar_relatorio(lista_locacoes, lista_clientes, lista_carros);
                 destruirLista(lista_clientes);
                 destruirLista(lista_carros);
                 destruirLista(lista_locacoes);

@@ -179,7 +179,6 @@ void gerar_relatorio(Lista *historico, Lista *lista_clientes, Lista *lista_carro
         ano_atual = tm_hoje->tm_year + 1900;
     }
 
-    double receita = calcular_receita_mes(historico, mes_atual, ano_atual);
     double receita_mes = calcular_receita_mes(historico, mes_atual, ano_atual);
     double receita_total = calcular_receita_total(historico);
     fprintf(arquivo, "\n--- RECEITA DO MES %02d/%d ---\n", mes_atual, ano_atual);

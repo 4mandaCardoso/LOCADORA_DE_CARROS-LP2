@@ -348,8 +348,16 @@ void reconstruir_relacoes_locacoes(Lista *historico, Lista *lista_clientes, List
     }
 }
 
-void liberar_locacoes(Lista *historico) {
-    if (historico != NULL) {
-        destruirLista(historico);
+int carro_possui_aluguel(Lista *historico, int id_carro) {
+    if (historico == NULL || listaVazia(historico)) return 0;
+    
+    No *aux = historico->cabeca;
+    while (aux != NULL) {
+        Aluguel *a = (Aluguel *) aux->dado;
+        if (a != NULL && a->carro_alugado != NULL && a->carro_alugado->id == id_carro) {
+            return 1; // Verdadeiro: encontrou um aluguel com esse carro
+        }
+        aux = aux->prox;
     }
+    return 0; // Falso: o carro está limpo, pode ser deletado.
 }

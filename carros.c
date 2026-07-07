@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "locacao.h"
 #include "carros.h"
 #include "util.h"
 
@@ -23,13 +25,25 @@ void cadastrar_carro(Lista *frota) {
     printf("\n--- CADASTRAR CARRO %d ---\n", novo_carro->id);
 
     printf("Modelo: ");
-    scanf(" %[^\n]", novo_carro->modelo);
+    fgets(novo_carro->modelo, TAM_MODELO, stdin);
+    remover_quebra_linha(novo_carro->modelo);
 
     printf("Placa: ");
-    scanf(" %[^\n]", novo_carro->placa);
+    fgets(novo_carro->placa, TAM_PLACA, stdin);
+    remover_quebra_linha(novo_carro->placa);
 
     printf("Preco da Diaria: ");
-    scanf("%f", &novo_carro->diaria);
+    
+    // um "intermediário" de texto temporário
+    char temp_diaria[20]; 
+    
+
+    fgets(temp_diaria, 20, stdin);
+    remover_quebra_linha(temp_diaria);
+    
+    //Converte o texto para FLOAT
+    novo_carro->diaria = atof(temp_diaria);
+
     limparBuffer();
 
     novo_carro->disponivel = 1;
@@ -39,7 +53,7 @@ void cadastrar_carro(Lista *frota) {
     printf("\nCarro cadastrado com sucesso! ID: %d\n", novo_carro->id);
 }
 
-void deletar_Carros(Lista *frota) {
+void deletar_Carros(Lista *frota, Lista *historico) {
     if (listaVazia(frota)) {
         printf("\nNenhum carro cadastrado para remover.\n");
         return;
@@ -60,6 +74,12 @@ void deletar_Carros(Lista *frota) {
     Carro *carro_remover = (Carro *) buscar(frota, &id_busca, comparar_carro_id);
     if (carro_remover == NULL) {
         printf("Carro com ID %d nao encontrado.\n", id_busca);
+        return;
+    }
+
+    if (carro_possui_aluguel(historico, id_busca) == 1) {
+        printf("\nERRO CRITICO: Nao e possivel excluir o carro '%s'.\n", carro_remover->modelo);
+        printf("Motivo: Ele possui um historico de locacao vinculado no sistema.\n");
         return;
     }
 
@@ -107,10 +127,3 @@ void listar_frota(Lista *frota) {
     }
 }
 
-void liberar_frota(Lista *frota) {
-    if (frota != NULL) {
-        destruirLista(frota);
-        printf("\nMemoria da frota liberada com sucesso!\n");
-        
-    }
-}

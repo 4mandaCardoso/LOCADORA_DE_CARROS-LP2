@@ -10,8 +10,8 @@
 
 int compara_cliente_cpf(void *dado, void *chave) // verifica se o CPF do cliente é igual ao CPF buscado
 {
-    Cliente *c = (Cliente *) dado;
-    char *cpf_busca = (char *) chave;
+    Cliente *c = (Cliente *) dado; 
+    char *cpf_busca = (char *) chave;  
 
     if (strcmp(c->cpf, cpf_busca) == 0){ // se o CPF do cliente for igual ao CPF buscado,  retorna 1 (verdadeiro)
         return 1;
@@ -46,13 +46,11 @@ int validar_cpf(Lista *lista_clientes, char *cpf, int id_cliente_atual)
 int validar_nome(Lista *lista_clientes, char *nome, int id_cliente_atual)
 {
     // Analisa o tamanho e se contém apenas dígitos
-    if (strlen(nome) == 0 || strspn(nome, "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ") != strlen(nome))
+    if (strlen(nome) == 0 || strspn(nome, " AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz") != strlen(nome))
     {
         printf("\nERRO: O nome deve conter apenas letras e espacos.\n");
         pausar();
-        // menu_gerenciar_clientes(lista_clientes); 
        
-        // eu quero que apos o enter do pausar ele limpe a tela, para que o usuario possa digitar novamente o nome, mas n suma com o menu superior. O QUE FAZER?
         return 0;
     }
 
@@ -339,8 +337,6 @@ void atualizar_cliente(Lista *lista_clientes)
 
         printf("\nCliente atualizado com sucesso!\n");
         
-        // Persistência de dados: Salva a lista de clientes atualizada em binário e texto
-        salvarListaBinarioETxt(lista_clientes, DADOS_CLIENTES_BIN, DADOS_CLIENTES_TXT, sizeof(Cliente), TIPO_CLIENTE);
     } 
     else
     {

@@ -11,7 +11,7 @@ void imprimir_cabecalho(const char *subtitulo);
 
 
 void menu_gerenciar_clientes(Lista *lista_clientes);
-void menu_gerenciar_carros(Lista *lista_carros);
+void menu_gerenciar_carros(Lista *lista_carros, Lista *lista_locacoes);
 void menu_gerenciar_alugueis(Lista *lista_clientes, Lista *lista_carros, Lista *lista_locacoes);
 void menu_admin(Lista *lista_clientes, Lista *lista_carros, Lista *lista_locacoes);
 

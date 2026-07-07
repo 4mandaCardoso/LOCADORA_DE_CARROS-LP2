@@ -1,0 +1,7 @@
+# Executáveis compilados
+*.exe
+*.out
+*.o
+
+# Pasta de saída de compilação
+output/

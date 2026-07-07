@@ -3,18 +3,22 @@
 
 #include "util.h"
 
+#define TAM_MODELO 50
+#define TAM_PLACA 10
+#define TAM_DIARIA 20
+
 typedef struct {
     int id;
-    char modelo[50];
-    char placa[10];
+    char modelo[TAM_MODELO];
+    char placa[TAM_PLACA];
     float diaria;
     int disponivel;
 } Carro;
 
 int comparar_carro_id(void *dado, void *chave);
 void cadastrar_carro(Lista *frota);
-void deletar_Carros(Lista *frota);
+void deletar_Carros(Lista *frota, Lista *historico);
 void listar_frota(Lista *frota);
-void liberar_frota(Lista *frota);
+
 
 #endif // CARROS_H

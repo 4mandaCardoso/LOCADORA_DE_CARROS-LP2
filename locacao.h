@@ -33,7 +33,8 @@ void listar_locacoes(Lista *historico);
 void salvar_locacoes_bin(Lista *historico, const char *arquivo_bin);
 void carregar_locacoes_bin(Lista *historico, const char *arquivo_bin);
 void reconstruir_relacoes_locacoes(Lista *historico, Lista *lista_clientes, Lista *lista_frota);
-void liberar_locacoes(Lista *historico);
+int carro_possui_aluguel(Lista *historico, int id_carro); //para evitar que quando o carro for deletado e  adm pedir um relatorio, o programa nao quebre, pois o carro nao existe mais, mas a locacao ainda existe.
+
 
 #endif // LOCACAO_H
 

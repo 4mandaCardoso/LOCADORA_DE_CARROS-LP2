@@ -6,8 +6,8 @@
 /* BIBLIOTECAS DE CLIENTES - TUDO QUE ENVOLVER CLIENTES*/
 
 #define TAM_NOME 100
-#define TAM_CPF 15
-#define TAM_IDADE 15
+#define TAM_CPF 50
+#define TAM_IDADE 20
 
 typedef struct
 {

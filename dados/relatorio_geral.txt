@@ -3,60 +3,17 @@
 =========================================================
 
 --- CLIENTES CADASTRADOS ---
-ID: 1 | Nome: amanda | idade: 21| CPF: 12345678911
-ID: 3 | Nome: vinicius lopes | idade: 20| CPF: 12345678910
+ID: 1 | Nome: Vinicius Lopes | idade: 19| CPF: 12345678910
+ID: 2 | Nome: Amanda Cardoso | idade: 21| CPF: 12345678911
+ID: 3 | Nome: Marcel Figueiredo | idade: 22| CPF: 12345678912
 
 --- FROTA DE CARROS ---
-ID: 1 | Modelo: hb20 | Placa: MQX-8214 | Diaria: R$ 200.00 | Status: Disponivel
-ID: 4 | Modelo: ONIX | Placa: OII-9013 | Diaria: R$ 170.00 | Status: Alugado
+ID: 1 | Modelo: HB20 | Placa: MQX-8214 | Diaria: R$ 300.00 | Status: Disponivel
+ID: 2 | Modelo: HILUX | Placa: MAF-4159 | Diaria: R$ 310.00 | Status: Disponivel
 
 --- RELACAO DE LOCACOES ---
-Locacao ID: 1
-  Cliente: (cliente desconhecido) (CPF: ---)
-  Carro:   hb20 (Placa: MQX-8214)
-  Retirada: 04/07/2026 18:37
-  Devolucao: 04/07/2026 18:37
-  Periodo: 2 dias
-  Total:   R$ 400.00
-  Status:  Encerrado
----------------------------------------------------------
-Locacao ID: 2
-  Cliente: amanda (CPF: 12345678911)
-  Carro:   hb20 (Placa: MQX-8214)
-  Retirada: 02/07/2026 20:49:27
-  Devolucao: 04/07/2026 20:49:27
-  Periodo: 2 dias
-  Total:   R$ 400.00
-  Status:  Encerrado
----------------------------------------------------------
-Locacao ID: 3
-  Cliente: vinicius lopes (CPF: 12345678910)
-  Carro:   ONIX (Placa: OII-9013)
-  Retirada: 02/07/2026 23:36:33
-  Devolucao: 03/07/2026 23:36:33
-  Periodo: 1 dias
-  Total:   R$ 170.00
-  Status:  Encerrado
----------------------------------------------------------
-Locacao ID: 4
-  Cliente: vinicius lopes (CPF: 12345678910)
-  Carro:   hb20 (Placa: MQX-8214)
-  Retirada: 02/07/2026 23:40:45
-  Devolucao: 05/07/2026 23:40:45
-  Periodo: 3 dias
-  Total:   R$ 600.00
-  Status:  Encerrado
----------------------------------------------------------
-Locacao ID: 5
-  Cliente: vinicius lopes (CPF: 12345678910)
-  Carro:   ONIX (Placa: OII-9013)
-  Retirada: 02/07/2026 23:42:04
-  Devolucao: 07/07/2026 23:42:04
-  Periodo: 5 dias
-  Total:   R$ 850.00
-  Status:  Ativo
----------------------------------------------------------
+Nenhuma locacao registrada no historico.
 
 --- RECEITA DO MES 07/2026 ---
-Receita do mes: R$ 2420.00
-Receita total acumulada: R$ 2420.00
+Receita do mes: R$ 0.00
+Receita total acumulada: R$ 0.00

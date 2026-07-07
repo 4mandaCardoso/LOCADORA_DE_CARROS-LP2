@@ -4,7 +4,7 @@
 #include <sys/stat.h>
 
 #if defined(_WIN32) || defined(_WIN64)
-#include <direct.h>
+#include <direct.h> // biblioteca de cabeçalhos para Windows
 #endif
 
 #include "util.h"
@@ -18,7 +18,7 @@ static int id_aluguel_atual = 0;
 
 Lista *criarLista()
 {
-    Lista *lista = (Lista *) malloc(sizeof(Lista));
+    Lista *lista = (Lista *) malloc(sizeof(Lista)); 
 
     if (lista == NULL)
     {
@@ -85,7 +85,7 @@ void inserirFinal(Lista *lista, void *dado)
 
     novo->dado = dado;
     novo->prox = NULL;
-   novo->ant = lista->cauda;
+    novo->ant = lista->cauda;
 
     if(lista->cauda == NULL) // se a Lista estava vazia
     {
@@ -146,8 +146,8 @@ int remover(Lista *lista, void *chave, int (*comparar)(void *, void *))
             else 
                 atual->prox->ant = atual->ant;
 
-            free(atual->dado);
-            free(atual);
+            free(atual->dado); //libera a memoria alocada para o dado genérico
+            free(atual); // libera a memoria alocada para o nó
 
             return 1;
         }
@@ -447,8 +447,8 @@ void limparBuffer()
 
 void remover_quebra_linha(char *dadoRecebido)
 {
-        dadoRecebido[strcspn(dadoRecebido, "\r\n")] = '\0'; // remove CR/LF de entradas no Windows e LF no Unix
-        // caso não encontre nenhum desses caracteres, strcspn retorna o tamanho da string sem alterar o conteúdo
+    dadoRecebido[strcspn(dadoRecebido, "\r\n")] = '\0';
+    // caso não encontre nenhum desses caracteres, strcspn retorna o tamanho da string sem alterar o conteúdo
 }
 
 int gerarID(TipoLista tipo)
