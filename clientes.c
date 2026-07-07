@@ -3,6 +3,7 @@
 #include "util.h"
 #include "menu.h"
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,8 +23,18 @@ int compara_cliente_cpf(void *dado, void *chave) // verifica se o CPF do cliente
 int validar_cpf(Lista *lista_clientes, char *cpf, int id_cliente_atual)
 {
     // Analisa o tamanho e se contém apenas dígitos
-    if (strlen(cpf) != 11 || strspn(cpf, "0123456789") != 11)
-    {
+     int i;
+     for (i = 0; cpf[i] != '\0'; i++) {
+        // Se passar de 11 caracteres ou encontrar algo que não seja número da erro 
+        if (i >= 11 || cpf[i] < '0' || cpf[i] > '9') {
+            printf("\nERRO: O CPF deve conter exatamente 11 digitos numericos.\n");
+            pausar();
+            return 0;
+        }
+    }
+
+    // Se o laço terminou e não chegou a 11 dígitos (ex: a string tinha apenas 5)
+    if (i != 11) {
         printf("\nERRO: O CPF deve conter exatamente 11 digitos numericos.\n");
         pausar();
         return 0;
@@ -45,25 +56,61 @@ int validar_cpf(Lista *lista_clientes, char *cpf, int id_cliente_atual)
 
 int validar_nome(Lista *lista_clientes, char *nome, int id_cliente_atual)
 {
-    // Analisa o tamanho e se contém apenas dígitos
-    if (strlen(nome) == 0 || strspn(nome, " AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz") != strlen(nome))
-    {
-        printf("\nERRO: O nome deve conter apenas letras e espacos.\n");
+    // Analisa se a pessoa apenas não digitou nada
+    if (nome == NULL || nome[0] == '\0') {
+        printf("\nERRO: O nome nao pode estar vazio.\n");
         pausar();
        
         return 0;
     }
 
+    int possui_letra = 0;
+    
+    for(int i=0;nome[i]!='\0';i++) {
+        
+        unsigned char c = (unsigned char) nome[i]; // a função isalpha() espera um valor de tipo unsigned char ou EOF, então fazemos o cast para evitar problemas com caracteres acentuados.
+        
+        
+        if(!isalpha(c) && !isspace(c)) {
+            printf("\nERRO: O nome deve conter apenas letras e espacos.\n");
+            pausar();
+            return 0;
+        }
 
+        if (isalpha(c)) {
+            possui_letra = 1; // Encontrou pelo menos uma letra válida
+        } 
+        
+        if (!possui_letra) {
+            printf("\nERRO: O nome nao pode conter apenas espacos sem letras.\n");
+            pausar();
+            return 0;
+        }
+    }
+    
     return 1; // Passou em todas as verificações, nome é válido
 }
 
 int validar_idade(Lista *lista_clientes, char *idade, int id_cliente_atual)
 {
     // Analisa o tamanho e se contém apenas dígitos
-    if (strlen(idade) == 0 || strspn(idade, "0123456789") != strlen(idade) || atoi(idade) < 18 || atoi(idade) > 135)
-    {
-        printf("\nERRO: A idade deve conter apenas digitos numericos e idades entre 18 e 135.\n");
+    if (idade == NULL || idade[0] == '\0') {
+        printf("\nERRO: A idade nao pode estar vazia.\n");
+        pausar();
+        return 0;
+    }
+
+    for (int i = 0; idade[i] != '\0'; i++) {
+        if (idade[i] < '0' || idade[i] > '9') {
+            printf("\nERRO: A idade deve conter apenas digitos numericos.\n");
+            pausar();
+            return 0;
+        }
+    }
+
+    int idade_int = atoi(idade);
+    if (idade_int < 18 || idade_int > 135) {
+        printf("\nERRO: Idades devem estar entre 18 e 135.\n");
         pausar();
         return 0;
     }
