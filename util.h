@@ -56,6 +56,7 @@ void limparBuffer();
 void remover_quebra_linha(char *dadoRecebido);
 int listaVazia(Lista *lista);
 int tamanhoLista(Lista *lista);
+void exibir_arquivo(const char *nome_arquivo);
 
 typedef enum {
     TIPO_CLIENTE, 

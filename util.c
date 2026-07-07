@@ -618,3 +618,21 @@ void** busca_universal(Lista *lista, TipoLista tipo_lista, char *termo_busca, in
 
     return resultados;
 }
+
+#include <stdio.h>
+
+void exibir_arquivo(const char *nome_arquivo) {
+    FILE *file = fopen(nome_arquivo, "r");
+    
+    if (file == NULL) {
+        printf("\n[ERRO] Nao foi possivel abrir o arquivo: %s\n", nome_arquivo);
+        return;
+    }
+
+    char linha[256];
+    // Lê linha por linha até o fim do arquivo
+    while (fgets(linha, sizeof(linha), file)) {
+        printf("%s", linha);
+    }
+    fclose(file);
+}

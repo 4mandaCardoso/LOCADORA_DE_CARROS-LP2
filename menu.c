@@ -307,6 +307,7 @@ void iniciar_sistema(Lista *lista_clientes, Lista *lista_carros, Lista *lista_lo
         printf("|                                                  |\n");
         printf("| [1] Administrador                                |\n");
         printf("| [2] Cliente                                      |\n");
+        printf("| [3] Ajuda                                        |\n");
         printf("|                                                  |\n");
         printf("| [0] Sair e Salvar Dados                          |\n");
         printf("+--------------------------------------------------+\n");
@@ -321,6 +322,8 @@ void iniciar_sistema(Lista *lista_clientes, Lista *lista_carros, Lista *lista_lo
             case 2:
                 menu_login_cliente(lista_clientes, lista_carros, lista_locacoes);
                 break;
+            case 3:
+                exibir_arquivo("ajuda.txt"); pausar();  break;
             case 0:
                 printf("\nEncerrando o sistema LOCAR...\n");
                 printf("Salvando dados em arquivos binarios e texto...\n");

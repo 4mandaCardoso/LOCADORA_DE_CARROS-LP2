@@ -1,0 +1,48 @@
+================================================================================
+                        MANUAL DE USUARIO - SISTEMA LOCAR
+================================================================================
+
+O LOCAR e um sistema de gestao de locadora de veiculos desenvolvido para oferecer
+eficiencia no controle de frota, clientes e historico de locacoes.
+
+1. ACESSO AO SISTEMA
+-------------------
+Ao iniciar, escolha o seu perfil:
+- Administrador: Acesso total para gestao de Clientes, Frota e Alugueis.
+- Cliente: Acesso para alugar veiculos e consultar seus proprios dados.
+
+2. PESQUISA INTELIGENTE (BUSCA UNIVERSAL)
+-----------------------------------------
+Utilize a nossa ferramenta de busca para encontrar registros rapidamente. O sistema
+identifica automaticamente o que voce digitou:
+- Clientes: Pesquise por ID, CPF (exato) ou parte do Nome.
+- Carros: Pesquise por ID, Placa (exata) ou parte do Modelo.
+- Alugueis: Pesquise por ID da locacao ou parte do nome do cliente associado.
+
+3. FUNCIONALIDADES DO ADMINISTRADOR
+-----------------------------------
+- Gestao de Clientes: Cadastrar, Editar, Excluir e Buscar clientes.
+  (Validacoes automaticas para CPF unico e idade permitida de 18 a 135 anos).
+- Gestao de Frota: Adicionar novos veiculos, editar informacoes (Modelo, Placa, Diaria)
+  ou remover veiculos (o sistema impede a exclusao de carros com historico ativo).
+- Alugueis: Realizar novas locacoes (verificando disponibilidade) e registrar devolucoes.
+- Relatorios: Gere um relatorio geral com resumo de clientes, frota e receita
+  mensal/total acumulada.
+
+4. FLUXO DO CLIENTE
+-------------------
+- Alugar: Selecione um veiculo disponivel da frota e defina o periodo de dias.
+- Meus Alugueis: Consulte o status (Ativo ou Concluido) e valores das suas locacoes.
+- Perfil: Visualize seus dados cadastrados.
+
+5. DICAS DE SEGURANCA E OPERACAO
+--------------------------------
+- Sair: Utilize sempre a opcao [0] "Sair e Salvar Dados". Isso garante que todas as
+  informacoes em memoria sejam gravadas nos arquivos .bin e .txt com seguranca.
+- Dados: O sistema utiliza arquivos binarios para persistencia. Caso altere a
+  estrutura de dados (structs), lembre-se de limpar os arquivos antigos para evitar
+  desalinhamento.
+- Validacao: O sistema bloqueia nomes com numeros e idades invalidas. Siga as
+  instrucoes na tela para corrigir eventuais erros de digitacao.
+
+================================================================================
