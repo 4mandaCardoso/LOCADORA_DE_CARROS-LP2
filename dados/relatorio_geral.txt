@@ -5,15 +5,22 @@
 --- CLIENTES CADASTRADOS ---
 ID: 1 | Nome: Vinicius Lopes | idade: 19| CPF: 12345678910
 ID: 2 | Nome: Amanda Cardoso | idade: 21| CPF: 12345678911
-ID: 3 | Nome: Marcel Figueiredo | idade: 22| CPF: 12345678912
 
 --- FROTA DE CARROS ---
-ID: 1 | Modelo: HB20 | Placa: MQX-8214 | Diaria: R$ 300.00 | Status: Disponivel
+ID: 1 | Modelo: HB20 | Placa: MQX-8214 | Diaria: R$ 300.00 | Status: Alugado
 ID: 2 | Modelo: HILUX | Placa: MAF-4159 | Diaria: R$ 310.00 | Status: Disponivel
 
 --- RELACAO DE LOCACOES ---
-Nenhuma locacao registrada no historico.
+Locacao ID: 1
+  Cliente: Vinicius Lopes (CPF: 12345678910)
+  Carro:   HB20 (Placa: MQX-8214)
+  Retirada: 07/07/2026 09:51:25
+  Devolucao: 10/07/2026 09:51:25
+  Periodo: 3 dias
+  Total:   R$ 900.00
+  Status:  Ativo
+---------------------------------------------------------
 
 --- RECEITA DO MES 07/2026 ---
-Receita do mes: R$ 0.00
-Receita total acumulada: R$ 0.00
+Receita do mes: R$ 900.00
+Receita total acumulada: R$ 900.00

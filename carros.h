@@ -19,6 +19,7 @@ int comparar_carro_id(void *dado, void *chave);
 void cadastrar_carro(Lista *frota);
 void deletar_Carros(Lista *frota, Lista *historico);
 void listar_frota(Lista *frota);
+void editar_carro(Lista *frota);
 
 
 #endif // CARROS_H

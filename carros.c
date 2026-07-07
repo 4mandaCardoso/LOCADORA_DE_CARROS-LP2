@@ -113,6 +113,7 @@ void listar_frota(Lista *frota) {
     }
 
     printf("\n--- FROTA DE VEICULOS ---\n");
+    printf("=== NUMERO DE CARROS CADASTRADOS: %d ===\n\n", tamanhoLista(frota));
     
     No *aux = frota->cabeca;
 
@@ -127,3 +128,62 @@ void listar_frota(Lista *frota) {
     }
 }
 
+void editar_carro(Lista *frota) {
+    if (listaVazia(frota)) {
+        printf("\nNenhum carro cadastrado para editar.\n");
+        return;
+    }
+
+    listar_frota(frota);
+    int id_busca;
+
+    printf("\nDigite o ID do carro que deseja editar: ");
+    if (scanf("%d", &id_busca) != 1) {
+        limparBuffer();
+        printf("ID invalido. Operacao cancelada.\n");
+        return;
+    }
+    limparBuffer();
+
+    // Busca o carro na lista
+    Carro *carro_editar = (Carro *) buscar(frota, &id_busca, comparar_carro_id);
+    
+    if (carro_editar == NULL) {
+        printf("Carro com ID %d nao encontrado.\n", id_busca);
+        return;
+    }
+
+    printf("\n--- EDITANDO CARRO ID %d ---\n", carro_editar->id);
+    printf("DICA: Pressione [ENTER] sem digitar nada para manter o valor atual.\n\n");
+
+    char buffer[100]; // Buffer temporário para capturar as entradas
+
+    // Atualização do Modelo
+    printf("Modelo atual [%s]: ", carro_editar->modelo);
+    fgets(buffer, sizeof(buffer), stdin);
+    remover_quebra_linha(buffer);
+    if (strlen(buffer) > 0) {
+        strcpy(carro_editar->modelo, buffer);
+    }
+
+    // Atualização da Placa
+    printf("Placa atual [%s]: ", carro_editar->placa);
+    fgets(buffer, sizeof(buffer), stdin);
+    remover_quebra_linha(buffer);
+    if (strlen(buffer) > 0) {
+        strcpy(carro_editar->placa, buffer);
+    }
+
+    // Atualização da Diária
+    printf("Preco da Diaria atual [R$ %.2f]: ", carro_editar->diaria);
+    fgets(buffer, sizeof(buffer), stdin);
+    remover_quebra_linha(buffer);
+    if (strlen(buffer) > 0) {
+        carro_editar->diaria = atof(buffer);
+    }
+
+    // O status de disponibilidade (disponivel) geralmente não é editado manualmente aqui, 
+    // pois ele é controlado pelo sistema de locação (alugar/devolver).
+
+    printf("\nCarro atualizado com sucesso!\n");
+}

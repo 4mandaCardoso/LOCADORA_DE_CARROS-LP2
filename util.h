@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
 #define DADOS_DIR "dados/"
 #define DADOS_CLIENTES_BIN DADOS_DIR "dados_clientes.bin"
@@ -63,5 +65,10 @@ typedef enum {
 
 int gerarID(TipoLista tipo);
 void sincronizarID(TipoLista tipo, int maior_id_encontrado);
+
+//========================
+// Buscas
+//========================
+void** busca_universal(Lista *lista, TipoLista tipo_lista, char *termo_busca, int *qtd_resultados);
 
 #endif

@@ -227,6 +227,8 @@ void listar_locacoes(Lista *historico) {
     atualizar_status_locacoes(historico);
 
     printf("\n--- HISTORICO DE LOCACOES INTERNAS (LOCAR) ---\n");
+    printf("=== NUMERO DE LOCACOES: %d ===\n\n", tamanhoLista(historico));
+
     No *aux = historico->cabeca;
 
     while (aux != NULL) {

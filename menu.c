@@ -41,7 +41,7 @@ void menu_gerenciar_clientes(Lista *lista_clientes) {
         printf("| [2] Cadastrar Cliente                            |\n");
         printf("| [3] Editar Cliente                               |\n");
         printf("| [4] Excluir Cliente                              |\n");
-        printf("|                                                  |\n");
+        printf("| [5] Buscar Cliente                               |\n");
         printf("| [0] Voltar                                       |\n");
         printf("+--------------------------------------------------+\n");
         printf("Escolha: ");
@@ -53,6 +53,7 @@ void menu_gerenciar_clientes(Lista *lista_clientes) {
             case 2: cadastrar_cliente(lista_clientes); pausar(); break;
             case 3: atualizar_cliente(lista_clientes); pausar(); break;
             case 4: remover_cliente(lista_clientes); pausar(); break;
+            case 5: menu_pesquisa_clientes(lista_clientes); pausar(); break;
             case 0: break;
             default: printf("Opcao invalida!\n"); pausar();
         }
@@ -64,8 +65,10 @@ void menu_gerenciar_carros(Lista *lista_carros, Lista *lista_locacoes) {
     do {
         imprimir_cabecalho("Menu de Carros (Admin)");
         printf("| [1] Listar Frota                                 |\n");
-        printf("| [2] Cadastrar Carro                              |\n");
-        printf("| [3] Excluir Carro                                |\n");
+        printf("| [2] Editar Carro                                 |\n");
+        printf("| [3] Buscar Carro                                 |\n");
+        printf("| [4] Cadastrar Carro                              |\n");
+        printf("| [5] Excluir Carro                                |\n");
         printf("|                                                  |\n");
         printf("| [0] Voltar                                       |\n");
         printf("+--------------------------------------------------+\n");
@@ -75,8 +78,10 @@ void menu_gerenciar_carros(Lista *lista_carros, Lista *lista_locacoes) {
 
         switch (opcao) {
             case 1: listar_frota(lista_carros); pausar(); break;
-            case 2: cadastrar_carro(lista_carros); pausar(); break;
-            case 3: deletar_Carros(lista_carros, lista_locacoes); pausar(); break;
+            case 2: editar_carro(lista_carros); pausar(); break;
+            case 3: menu_pesquisa_carros(lista_carros); pausar(); break;
+            case 4: cadastrar_carro(lista_carros); pausar(); break;
+            case 5: deletar_Carros(lista_carros, lista_locacoes); pausar(); break;
             case 0: break;
             default: printf("Opcao invalida!\n"); pausar();
         }
@@ -88,8 +93,9 @@ void menu_gerenciar_alugueis(Lista *lista_clientes, Lista *lista_carros, Lista *
     do {
         imprimir_cabecalho("Menu de Alugueis (Admin)");
         printf("| [1] Listar Alugueis                              |\n");
-        printf("| [2] Cadastrar Aluguel (Retirada)                 |\n");
-        printf("| [3] Registrar Devolucao                          |\n");
+        printf("| [2] Buscar carro                                 |\n");
+        printf("| [3] Cadastrar Aluguel (Retirada)                 |\n");
+        printf("| [4] Registrar Devolucao                          |\n");
         printf("|                                                  |\n");
         printf("| [0] Voltar                                       |\n");
         printf("+--------------------------------------------------+\n");
@@ -98,8 +104,11 @@ void menu_gerenciar_alugueis(Lista *lista_clientes, Lista *lista_carros, Lista *
         limparBuffer();
 
         switch (opcao) {
-            case 1: listar_locacoes(lista_locacoes); pausar(); break;
+            case 1: 
+                listar_locacoes(lista_locacoes); pausar(); break;
             case 2: 
+                menu_pesquisa_carros(lista_carros); pausar(); break;
+            case 3: 
             if (listaVazia(lista_clientes)) {
                 printf("Nenhum cliente cadastrado no sistema. Nao e possivel realizar locacao.\n");
                 pausar();
@@ -113,7 +122,7 @@ void menu_gerenciar_alugueis(Lista *lista_clientes, Lista *lista_carros, Lista *
             listar_clientes(lista_clientes);
             listar_frota(lista_carros);
             realizar_locacao(lista_locacoes, lista_clientes, lista_carros, NULL); pausar(); break;
-            case 3: realizar_devolucao(lista_locacoes); pausar(); break;
+            case 4: realizar_devolucao(lista_locacoes); pausar(); break;
             case 0: break;
             default: printf("Opcao invalida!\n"); pausar();
         }
@@ -183,7 +192,7 @@ void listar_meus_alugueis(Lista *lista_locacoes, int id_cliente) {
 
 void menu_cliente_logado(Cliente *cliente, Lista *lista_clientes, Lista *lista_carros, Lista *lista_locacoes) {
     int opcao;
-    char subtitulo[100];
+    char subtitulo[114];
     sprintf(subtitulo, "Bem-vindo(a), %s", cliente->nome);
 
     do {
@@ -330,4 +339,98 @@ void iniciar_sistema(Lista *lista_clientes, Lista *lista_carros, Lista *lista_lo
                 pausar();
         }
     } while (opcao != 0);
+}
+
+void menu_pesquisa_clientes(Lista *lista_clientes) {
+    char termo[100];
+    int qtd_encontrada = 0;
+
+    printf("\n--- PESQUISA DE CLIENTES ---\n");
+    printf("Digite o ID, CPF ou parte do Nome do cliente: ");
+    fgets(termo, sizeof(termo), stdin);
+    remover_quebra_linha(termo);
+
+    void **clientes = busca_universal(lista_clientes, TIPO_CLIENTE, termo, &qtd_encontrada);
+
+    if (clientes != NULL) {
+        printf("\n--- RESULTADOS (%d encontrados) ---\n", qtd_encontrada);
+        for (int i = 0; i < qtd_encontrada; i++) {
+            Cliente *c = (Cliente *)clientes[i];
+            // %03d formata o ID com 3 zeros (ex: 001, 012). %-20s alinha o nome à esquerda ocupando 20 espaços.
+            printf("ID: %03d | Nome: %-20s | CPF: %-15s | Idade: %s\n", 
+                   c->id, c->nome, c->cpf, c->idade);
+        }
+        free(clientes); // Libera o array gerado pela busca
+    } else {
+        printf("\n[AVISO] Nenhum cliente encontrado para o termo: '%s'.\n", termo);
+    }
+}
+
+
+void menu_pesquisa_carros(Lista *lista_carros) {
+    char termo[100];
+    int qtd_encontrada = 0;
+
+    printf("\n--- PESQUISA DE FOTA (CARROS) ---\n");
+    printf("Digite o ID, Placa ou parte do Modelo do carro: ");
+    fgets(termo, sizeof(termo), stdin);
+    remover_quebra_linha(termo);
+
+    void **carros = busca_universal(lista_carros, TIPO_CARRO, termo, &qtd_encontrada);
+
+    if (carros != NULL) {
+        printf("\n--- RESULTADOS (%d encontrados) ---\n", qtd_encontrada);
+        for (int i = 0; i < qtd_encontrada; i++) {
+            Carro *c = (Carro *)carros[i];
+            
+            // Define o texto do status para ficar mais bonito na tela
+            char status_texto[20];
+            strcpy(status_texto, c->disponivel ? "Disponivel" : "Alugado");
+
+            printf("ID: %03d | Modelo: %-15s | Placa: %-10s | Diaria: R$ %6.2f | Status: %s\n", 
+                   c->id, c->modelo, c->placa, c->diaria, status_texto);
+        }
+        free(carros); 
+    } else {
+        printf("\n[AVISO] Nenhum carro encontrado para o termo: '%s'.\n", termo);
+    }
+}
+
+void menu_pesquisa_locacoes(Lista *lista_locacoes) {
+    char termo[100];
+    int qtd_encontrada = 0;
+
+    printf("\n--- PESQUISA DE LOCACOES ---\n");
+    printf("Digite o ID da locacao ou parte do Nome do cliente: ");
+    fgets(termo, sizeof(termo), stdin);
+    remover_quebra_linha(termo);
+
+    void **locacoes = busca_universal(lista_locacoes, TIPO_ALUGUEL, termo, &qtd_encontrada);
+
+    if (locacoes != NULL) {
+        printf("\n--- RESULTADOS (%d encontrados) ---\n", qtd_encontrada);
+        for (int i = 0; i < qtd_encontrada; i++) {
+            Aluguel *a = (Aluguel *)locacoes[i];
+            
+            // Tratamento de segurança: Caso o cliente ou carro tenham sido deletados do sistema
+            char nome_cliente[TAM_NOME] = "Desconhecido";
+            char modelo_carro[TAM_MODELO] = "Desconhecido";
+            
+            if (a->cliente_locador != NULL) {
+                strcpy(nome_cliente, a->cliente_locador->nome);
+            }
+            if (a->carro_alugado != NULL) {
+                strcpy(modelo_carro, a->carro_alugado->modelo);
+            }
+
+            char status_texto[15];
+            strcpy(status_texto, a->status == 1 ? "Ativo" : "Encerrado");
+
+            printf("ID: %03d | Cliente: %-15s | Carro: %-12s | Total: R$ %6.2f | Status: %s\n", 
+                   a->id, nome_cliente, modelo_carro, a->valorTotal, status_texto);
+        }
+        free(locacoes); 
+    } else {
+        printf("\n[AVISO] Nenhuma locacao encontrada para o termo: '%s'.\n", termo);
+    }
 }

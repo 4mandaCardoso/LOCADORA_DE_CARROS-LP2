@@ -1,0 +1,1 @@
+ID Locacao: 1 | Cliente ID: 1 | Carro ID: 1 | Retirada: 07/07/2026 09:51:25 | Devolucao: 10/07/2026 09:51:25 | Dias: 3 | Valor Total: R$ 900.00 | Status: Ativo
