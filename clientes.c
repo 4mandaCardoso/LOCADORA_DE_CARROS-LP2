@@ -210,6 +210,7 @@ void listar_clientes(Lista *lista_clientes)
 
     No *aux = lista_clientes->cabeca;
     printf("\n========================= LISTA DE CLIENTES =========================\n");
+    printf(" === NUMERO DE CLIENTES CADASTRADOS: %d ===\n", tamanhoLista(lista_clientes));
     while (aux != NULL)
     {
         Cliente *c = (Cliente *) aux->dado; //troca do ponteiro genérico para Cliente

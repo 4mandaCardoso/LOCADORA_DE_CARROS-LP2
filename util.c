@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <string.h>
+#include <ctype.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <direct.h> // biblioteca de cabeçalhos para Windows
@@ -488,4 +490,131 @@ void sincronizarID(TipoLista tipo, int maior_id_encontrado)
             id_aluguel_atual = maior_id_encontrado + 1;
             break;
     }
+}
+
+
+// EXCLUSIVAMENTE PARA BUSCAS DENTRO DO PROGRAMA
+
+
+static int compara_cliente_id(const void *a, const void *b) {
+    return (*(Cliente **)a)->id - (*(Cliente **)b)->id;
+}
+static int compara_carro_id(const void *a, const void *b) {
+    return (*(Carro **)a)->id - (*(Carro **)b)->id;
+}
+static int compara_locacao_id(const void *a, const void *b) {
+    return (*(Aluguel **)a)->id - (*(Aluguel **)b)->id;
+}
+
+// Verifica se a string digitada é composta apenas por números
+static int eh_numero(const char *str) {
+    if (str == NULL || *str == '\0') return 0;
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (!isdigit(str[i])) return 0; // Se tiver letra, espaço ou traço, não é um ID puro
+    }
+    return 1;
+}
+
+static void* busca_binaria_recursiva(void **array, int inicio, int fim, int id_busca, TipoLista tipo) {
+    if (inicio > fim) return NULL; 
+
+    int meio = inicio + (fim - inicio) / 2;
+    int id_atual = -1;
+
+    if (tipo == TIPO_CLIENTE) id_atual = ((Cliente *)array[meio])->id;
+    else if (tipo == TIPO_CARRO) id_atual = ((Carro *)array[meio])->id;
+    else if (tipo == TIPO_ALUGUEL) id_atual = ((Aluguel *)array[meio])->id;
+
+    if (id_atual == id_busca) {
+        return array[meio]; 
+    } 
+    else if (id_atual < id_busca) {
+        return busca_binaria_recursiva(array, meio + 1, fim, id_busca, tipo);
+    } 
+    else {
+        return busca_binaria_recursiva(array, inicio, meio - 1, id_busca, tipo);
+    }
+}
+
+void** busca_universal(Lista *lista, TipoLista tipo_lista, char *termo_busca, int *qtd_resultados) {
+    *qtd_resultados = 0;
+    
+    if (listaVazia(lista) || termo_busca == NULL) {
+        return NULL;
+    }
+
+    int tamanho = tamanhoLista(lista);
+    
+    // Prepara os arrays
+    void **array_temp = malloc(tamanho * sizeof(void *));
+    void **resultados = malloc(tamanho * sizeof(void *));
+    
+    if (!array_temp || !resultados) {
+        if(array_temp) free(array_temp);
+        if(resultados) free(resultados);
+        return NULL;
+    }
+
+    No *aux = lista->cabeca;
+    for (int i = 0; i < tamanho; i++) {
+        array_temp[i] = aux->dado;
+        aux = aux->prox;
+    }
+
+    // Ordena o array para permitir a Busca Binária
+    if (tipo_lista == TIPO_CLIENTE) qsort(array_temp, tamanho, sizeof(void *), compara_cliente_id);
+    else if (tipo_lista == TIPO_CARRO) qsort(array_temp, tamanho, sizeof(void *), compara_carro_id);
+    else if (tipo_lista == TIPO_ALUGUEL) qsort(array_temp, tamanho, sizeof(void *), compara_locacao_id);
+
+    void *item_achado_no_id = NULL;
+
+    // BUSCA BINÁRIA RECURSIVA (Executa se for um número)
+    if (eh_numero(termo_busca)) {
+        int id_busca = atoi(termo_busca);
+        
+        // Chamada da função recursiva passando os limites (0 até tamanho - 1)
+        item_achado_no_id = busca_binaria_recursiva(array_temp, 0, tamanho - 1, id_busca, tipo_lista);
+        
+        if (item_achado_no_id != NULL) {
+            resultados[(*qtd_resultados)++] = item_achado_no_id; // Salva nos resultados
+        }
+    }
+
+    // BUSCA LINEAR POR TEXTO (Para CPF, Placa, Nome, Modelo)
+    for (int i = 0; i < tamanho; i++) {
+        void *item_atual = array_temp[i];
+        
+        // BLOQUEIO DE DUPLICATAS
+        if (item_atual == item_achado_no_id) {
+            continue;
+        }
+
+        int deu_match = 0;
+
+        if (tipo_lista == TIPO_CLIENTE) {
+            Cliente *c = (Cliente *)item_atual;
+            if (strcmp(c->cpf, termo_busca) == 0 || strstr(c->nome, termo_busca) != NULL) deu_match = 1;
+        } 
+        else if (tipo_lista == TIPO_CARRO) {
+            Carro *c = (Carro *)item_atual;
+            if (strcmp(c->placa, termo_busca) == 0 || strstr(c->modelo, termo_busca) != NULL) deu_match = 1;
+        } 
+        else if (tipo_lista == TIPO_ALUGUEL) {
+            Aluguel *a = (Aluguel *)item_atual;
+            if (a->cliente_locador != NULL && strstr(a->cliente_locador->nome, termo_busca) != NULL) deu_match = 1;
+        }
+
+        if (deu_match) {
+            resultados[(*qtd_resultados)++] = item_atual;
+        }
+    }
+
+    free(array_temp);
+
+    if (*qtd_resultados == 0) {
+        free(resultados);
+        return NULL;
+    }
+
+    return resultados;
 }

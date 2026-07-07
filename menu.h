@@ -21,5 +21,8 @@ void menu_login_cliente(Lista *lista_clientes, Lista *lista_carros, Lista *lista
 
 
 void iniciar_sistema(Lista *lista_clientes, Lista *lista_carros, Lista *lista_locacoes);
+void menu_pesquisa_carros(Lista *lista_carros);
+void menu_pesquisa_clientes(Lista *lista_clientes);
+void menu_pesquisa_locacoes(Lista *lista_locacoes);
 
 #endif // MENU_H
