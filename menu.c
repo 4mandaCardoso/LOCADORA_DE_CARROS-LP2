@@ -183,7 +183,7 @@ void listar_meus_alugueis(Lista *lista_locacoes, int id_cliente) {
 
 void menu_cliente_logado(Cliente *cliente, Lista *lista_clientes, Lista *lista_carros, Lista *lista_locacoes) {
     int opcao;
-    char subtitulo[60];
+    char subtitulo[100];
     sprintf(subtitulo, "Bem-vindo(a), %s", cliente->nome);
 
     do {
