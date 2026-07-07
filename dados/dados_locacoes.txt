@@ -1,0 +1,7 @@
+ID Locacao: 1 | Cliente ID: 2 | Carro ID: 1 | Retirada: 04/07/2026 18:37 | Devolucao: 04/07/2026 18:37 | Dias: 2 | Valor Total: R$ 400.00 | Status: Encerrado
+ID Locacao: 2 | Cliente ID: 1 | Carro ID: 1 | Retirada: 02/07/2026 20:49:27 | Devolucao: 04/07/2026 20:49:27 | Dias: 2 | Valor Total: R$ 400.00 | Status: Encerrado
+ID Locacao: 3 | Cliente ID: 3 | Carro ID: 4 | Retirada: 02/07/2026 23:36:33 | Devolucao: 03/07/2026 23:36:33 | Dias: 1 | Valor Total: R$ 170.00 | Status: Encerrado
+ID Locacao: 4 | Cliente ID: 3 | Carro ID: 1 | Retirada: 02/07/2026 23:40:45 | Devolucao: 05/07/2026 23:40:45 | Dias: 3 | Valor Total: R$ 600.00 | Status: Encerrado
+ID Locacao: 5 | Cliente ID: 3 | Carro ID: 4 | Retirada: 02/07/2026 23:42:04 | Devolucao: 07/07/2026 23:42:04 | Dias: 5 | Valor Total: R$ 850.00 | Status: Encerrado
+ID Locacao: 6 | Cliente ID: 2 | Carro ID: 4 | Retirada: 03/07/2026 01:11:58 | Devolucao: 05/07/2026 01:11:58 | Dias: 2 | Valor Total: R$ 340.00 | Status: Encerrado
+ID Locacao: 7 | Cliente ID: 2 | Carro ID: 4 | Retirada: 03/07/2026 01:13:53 | Devolucao: 05/07/2026 01:13:53 | Dias: 2 | Valor Total: R$ 340.00 | Status: Ativo
