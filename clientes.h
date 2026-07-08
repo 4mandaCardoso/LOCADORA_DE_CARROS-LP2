@@ -3,12 +3,12 @@
 
 #include "util.h"
 
-/* BIBLIOTECAS DE CLIENTES - TUDO QUE ENVOLVER CLIENTES*/
-
+// Definições de tamanho para os campos do cliente
 #define TAM_NOME 100
 #define TAM_CPF 50
 #define TAM_IDADE 20
 
+// Estrutura que representa um cliente
 typedef struct
 {
     int id;

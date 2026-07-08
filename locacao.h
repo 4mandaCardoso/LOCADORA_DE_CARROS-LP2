@@ -6,12 +6,15 @@
 #include "clientes.h"
 #include <time.h>
 
+// Definições de tamanho para os campos de data e hora
 #define TAM_DATA_HORA 20
 #define TAM_STATUS 20
 
+// Definições de status para as locações
 #define STATUS_ATIVO 1
 #define STATUS_ENCERRADO 0
 
+// Estrutura que representa uma locação
 typedef struct Aluguel {
     int id;
     Cliente *cliente_locador;
@@ -27,6 +30,8 @@ typedef struct Aluguel {
     int idCarro;
 } Aluguel;
 
+
+// Funções para gerenciar locações
 void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frota, Cliente *cliente_logado);
 void realizar_devolucao(Lista *historico, Cliente *cliente_logado);
 void listar_locacoes(Lista *historico);

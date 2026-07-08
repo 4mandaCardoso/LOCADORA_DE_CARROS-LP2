@@ -6,12 +6,15 @@
 #include "carros.h"
 #include "util.h"
 
+
+// Função auxiliar para comparar IDs de carros
 int comparar_carro_id(void *dado, void *chave) {
     Carro *c = (Carro *)dado;
     int *id_busca = (int *)chave;
     return (c->id == *id_busca);
 }
 
+//CRUD: função de cadastro de carros
 void cadastrar_carro(Lista *frota) {
     Carro *novo_carro = (Carro *) malloc(sizeof(Carro));
     
@@ -53,6 +56,7 @@ void cadastrar_carro(Lista *frota) {
     printf("\nCarro cadastrado com sucesso! ID: %d\n", novo_carro->id);
 }
 
+//CRUD: Função para remover um carro da frota
 void deletar_Carros(Lista *frota, Lista *historico) {
     if (listaVazia(frota)) {
         printf("\nNenhum carro cadastrado para remover.\n");
@@ -106,6 +110,7 @@ void deletar_Carros(Lista *frota, Lista *historico) {
     }
 }
 
+//CRUD: Função para listar todos os carros na frota
 void listar_frota(Lista *frota) {
     if (listaVazia(frota)) {
         printf("\nNenhum carro cadastrado na frota no momento.\n");
@@ -128,6 +133,7 @@ void listar_frota(Lista *frota) {
     }
 }
 
+//CRUD: Função para editar informações de um carro na frota
 void editar_carro(Lista *frota) {
     if (listaVazia(frota)) {
         printf("\nNenhum carro cadastrado para editar.\n");

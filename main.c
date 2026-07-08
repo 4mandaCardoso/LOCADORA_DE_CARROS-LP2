@@ -5,7 +5,7 @@
 #include "locacao.h"
 #include "relatorio.h"
 
-
+// main de inicialização do sistema, carregamento de dados e execução do menu principal e funções de relatório e ajuda
 int main(int argc, char *argv[]) {
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--ajuda") == 0) {

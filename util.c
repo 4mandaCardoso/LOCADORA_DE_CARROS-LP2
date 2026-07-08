@@ -18,6 +18,7 @@ static int id_cliente_atual = 0;
 static int id_carro_atual = 0;
 static int id_aluguel_atual = 0;
 
+// Função para criar uma nova lista duplamente encadeada
 Lista *criarLista()
 {
     Lista *lista = (Lista *) malloc(sizeof(Lista)); 
@@ -34,7 +35,7 @@ Lista *criarLista()
     return lista;
 }
 
-
+// Função para verificar se a lista está vazia
 int listaVazia(Lista *lista)
 {
     if(lista == NULL)
@@ -43,6 +44,7 @@ int listaVazia(Lista *lista)
     return (lista->cabeca == NULL && lista->cauda == NULL);
 }
 
+//Função para inserir um novo nó no início da lista
 void inserirInicio(Lista *lista, void *dado)
 {
     if(lista == NULL || dado == NULL)
@@ -72,6 +74,7 @@ void inserirInicio(Lista *lista, void *dado)
     lista->cabeca = novo;
 }
 
+//Função para inserir um novo nó no final da lista
 void inserirFinal(Lista *lista, void *dado)
 {
     if(lista == NULL || dado == NULL)
@@ -101,6 +104,7 @@ void inserirFinal(Lista *lista, void *dado)
 
 }
 
+// função generica para buscar um dado na lista usando uma função de comparação
 void *buscar(Lista *lista,void *chave,int (*comparar)(void *, void *))
 {
     if(lista == NULL)
@@ -121,7 +125,7 @@ void *buscar(Lista *lista,void *chave,int (*comparar)(void *, void *))
     return NULL; // significa que não encontrou o dado na lista, logo o dado não existe na lista ainda
 }
 
-
+// função generica para remover um dado da lista usando uma função de comparação
 int remover(Lista *lista, void *chave, int (*comparar)(void *, void *))
 {
     if(lista == NULL)
@@ -160,7 +164,7 @@ int remover(Lista *lista, void *chave, int (*comparar)(void *, void *))
     return 0;
 }
 
-
+// Função para destruir a lista e liberar a memória alocada
 void destruirLista(Lista *lista)
 {
     if(lista == NULL)
@@ -184,7 +188,7 @@ void destruirLista(Lista *lista)
     free(lista);
 }
 
-
+// Função que retorna o tamanho da lista (quantidade de elementos)
 int tamanhoLista(Lista *lista)
 {
     if(lista == NULL)
@@ -204,7 +208,7 @@ int tamanhoLista(Lista *lista)
     return contador;
 }
 
-
+// Função para salvar a lista em um arquivo binário
 void salvarLista(Lista *lista, char arquivo[], size_t tamanho)
 {
     /* Abre o arquivo para escrita binária ("wb"). Mesmo lista vazia deve truncar o arquivo. */
@@ -236,6 +240,7 @@ void salvarLista(Lista *lista, char arquivo[], size_t tamanho)
     printf("Dados salvos com sucesso em '%s'.\n", arquivo);
 }
 
+// Função para salvar a lista em um arquivo de texto
 void salvarLista_txt(Lista *lista, const char *arquivo_txt, size_t tamanho, int tipo_lista)
 {
     if(arquivo_txt == NULL)
@@ -300,12 +305,14 @@ void salvarLista_txt(Lista *lista, const char *arquivo_txt, size_t tamanho, int 
     printf("Dados salvos em texto com sucesso em '%s'.\n", arquivo_txt);
 }
 
+// Função para salvar a lista em arquivos binário e texto (função que chama as duas funções acima para ter uma única chamada)
 void salvarListaBinarioETxt(Lista *lista, const char *arquivo_bin, const char *arquivo_txt, size_t tamanho, int tipo_lista)
 {
     salvarLista(lista, (char *) arquivo_bin, tamanho);
     salvarLista_txt(lista, arquivo_txt, tamanho, tipo_lista);
 }
 
+// Função para carregar a lista de um arquivo binário
 void carregarLista(Lista *lista, char arquivo[], size_t tamanho)
 {
     if(lista == NULL)
@@ -349,6 +356,7 @@ void carregarLista(Lista *lista, char arquivo[], size_t tamanho)
     printf("Dados carregados com sucesso de '%s'.\n", arquivo);
 }
 
+// Função para reconstruir as relações entre locações, clientes e carros após carregar os dados do arquivo binário  
 static int achar_maior_id_clientes(Lista *lista) {
     int maior = 0;
     if (lista == NULL) return maior;
@@ -364,6 +372,7 @@ static int achar_maior_id_clientes(Lista *lista) {
     return maior;
 }
 
+// Função auxiliar para encontrar o maior ID de carros na lista e recuperar o próximo ID disponível
 static int achar_maior_id_carros(Lista *lista) {
     int maior = 0;
     if (lista == NULL) return maior;
@@ -379,6 +388,7 @@ static int achar_maior_id_carros(Lista *lista) {
     return maior;
 }
 
+// Função auxiliar para encontrar o maior ID de locações na lista e recuperar o próximo ID disponível
 static int achar_maior_id_locacoes(Lista *lista) {
     int maior = 0;
     if (lista == NULL) return maior;
@@ -394,6 +404,7 @@ static int achar_maior_id_locacoes(Lista *lista) {
     return maior;
 }
 
+// Função para criar a pasta "dados" caso ela não exista, garantindo que os arquivos binários e de texto possam ser salvos corretamente
 static void criar_pasta_dados() {
     struct stat st = {0};
     if (stat(DADOS_DIR, &st) == -1) {
@@ -405,6 +416,7 @@ static void criar_pasta_dados() {
     }
 }
 
+// Função para carregar os dados do sistema (clientes, carros e locações) a partir dos arquivos binários, reconstruindo as relações entre eles
 void carregar_dados_sistema(Lista *lista_clientes, Lista *lista_carros, Lista *lista_locacoes) {
     if (lista_clientes == NULL || lista_carros == NULL || lista_locacoes == NULL) {
         return;
@@ -423,6 +435,7 @@ void carregar_dados_sistema(Lista *lista_clientes, Lista *lista_carros, Lista *l
     reconstruir_relacoes_locacoes(lista_locacoes, lista_clientes, lista_carros);
 }
 
+// Função generica para limpar tela
 void limparTela()
 {
     /* Verifica o sistema operacional para rodar o comando correto */
@@ -433,7 +446,7 @@ void limparTela()
     #endif
 }
 
-
+// Função para pausar e permitir a leitura das mensagens de erro
 void pausar()
 {
     printf("\nPressione [ENTER] para continuar...\n");
@@ -441,18 +454,21 @@ void pausar()
     while ((c = getchar()) != '\n' && c != EOF); 
 }
 
+// Função para enviar lixo de memoria no buffer e assim gerando erro em entrada de dados
 void limparBuffer()
 {
     int c;
     while ((c = getchar()) != '\n' && c != EOF); 
 }
 
+//função para remover "\n" no final de alguma entrada de dados
 void remover_quebra_linha(char *dadoRecebido)
 {
     dadoRecebido[strcspn(dadoRecebido, "\r\n")] = '\0';
     // caso não encontre nenhum desses caracteres, strcspn retorna o tamanho da string sem alterar o conteúdo
 }
 
+// Função genêrica que gera o ID do tipo de dado que ela receber (cliente, carro ou aluguel)
 int gerarID(TipoLista tipo)
 {
     switch(tipo)
@@ -472,7 +488,7 @@ int gerarID(TipoLista tipo)
     }
 }
 
-
+//Função genêrico que atualiza e atrela o ID do tipo de dado que ela recebe (cliente, carro e aluguel)
 void sincronizarID(TipoLista tipo, int maior_id_encontrado)
 {
 

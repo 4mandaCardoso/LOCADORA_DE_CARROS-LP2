@@ -6,6 +6,7 @@
 #include <string.h>
 #include <ctype.h>
 
+// Definições dos nomes dos arquivos gerados pelos relatorios
 #define DADOS_DIR "dados/"
 #define DADOS_CLIENTES_BIN DADOS_DIR "dados_clientes.bin"
 #define DADOS_CARROS_BIN DADOS_DIR "dados_carros.bin"

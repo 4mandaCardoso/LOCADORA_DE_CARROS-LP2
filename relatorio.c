@@ -4,6 +4,7 @@
 #include "relatorio.h"
 #include "util.h"
 
+// Função auxiliar para extrair mês e ano de uma string de data/hora no formato "dd/mm/yyyy hh:mm:ss"
 static int extrair_mes_ano(const char *dataHora, int *mes, int *ano) {
     int dia, hora, minuto, segundo;
     if (dataHora == NULL || mes == NULL || ano == NULL) {
@@ -22,6 +23,7 @@ static int extrair_mes_ano(const char *dataHora, int *mes, int *ano) {
     return 1;
 }
 
+// Função para mostrar o relatório geral no console
 void mostrar_relatorio(Lista *historico, Lista *lista_clientes, Lista *lista_carros) {
     if (historico == NULL || lista_clientes == NULL || lista_carros == NULL) {
         printf("Erro: Listas invalidas para mostrar relatorio.\n");
@@ -101,6 +103,7 @@ void mostrar_relatorio(Lista *historico, Lista *lista_clientes, Lista *lista_car
     printf("Receita total acumulada: R$ %.2f\n", receita_total);
 }
 
+// Função para gerar o relatório geral em arquivo de texto  para melhor visualização
 void gerar_relatorio(Lista *historico, Lista *lista_clientes, Lista *lista_carros) {
     if (historico == NULL || lista_clientes == NULL || lista_carros == NULL) {
         printf("Erro: Listas invalidas para gerar relatorio.\n");
@@ -189,6 +192,7 @@ void gerar_relatorio(Lista *historico, Lista *lista_clientes, Lista *lista_carro
     printf("\n>>> Arquivo 'relatorio_geral.txt' gerado com sucesso! <<<\n");
 }
 
+// Função para calcular a receita do mês específico
 double calcular_receita_mes(Lista *historico, int mes, int ano) {
     if (historico == NULL) {
         return 0.0;
@@ -211,6 +215,7 @@ double calcular_receita_mes(Lista *historico, int mes, int ano) {
     return total;
 }
 
+// Função para calcular a receita total acumulada
 double calcular_receita_total(Lista *historico) {
     if (historico == NULL) {
         return 0.0;

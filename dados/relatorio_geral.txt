@@ -6,9 +6,10 @@
 ID: 1 | Nome: Vinicius Lopes | idade: 19| CPF: 12345678910
 ID: 2 | Nome: Amanda Cardoso | idade: 21| CPF: 12345678911
 ID: 3 | Nome: Vinicius | idade: 19| CPF: 12345678912
+ID: 4 | Nome: Marcel | idade: 21| CPF: 12345678913
 
 --- FROTA DE CARROS ---
-ID: 1 | Modelo: HB20 | Placa: MQX-8214 | Diaria: R$ 300.00 | Status: Alugado
+ID: 1 | Modelo: HB20 | Placa: MQX-8214 | Diaria: R$ 300.00 | Status: Disponivel
 ID: 2 | Modelo: HILUX | Placa: MAF-4159 | Diaria: R$ 310.00 | Status: Disponivel
 
 --- RELACAO DE LOCACOES ---
@@ -19,7 +20,7 @@ Locacao ID: 1
   Devolucao: 10/07/2026 09:51:25
   Periodo: 3 dias
   Total:   R$ 900.00
-  Status:  Ativo
+  Status:  Encerrado
 ---------------------------------------------------------
 
 --- RECEITA DO MES 07/2026 ---

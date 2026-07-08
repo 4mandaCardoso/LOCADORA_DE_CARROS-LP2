@@ -60,6 +60,7 @@ void menu_gerenciar_clientes(Lista *lista_clientes) {
     } while (opcao != 0);
 }
 
+// ====================================================================
 void menu_gerenciar_carros(Lista *lista_carros, Lista *lista_locacoes) {
     int opcao;
     do {
@@ -88,6 +89,7 @@ void menu_gerenciar_carros(Lista *lista_carros, Lista *lista_locacoes) {
     } while (opcao != 0);
 }
 
+// ====================================================================
 void menu_gerenciar_alugueis(Lista *lista_clientes, Lista *lista_carros, Lista *lista_locacoes) {
     int opcao;
     do {
@@ -129,6 +131,7 @@ void menu_gerenciar_alugueis(Lista *lista_clientes, Lista *lista_carros, Lista *
     } while (opcao != 0);
 }
 
+// ====================================================================
 void menu_admin(Lista *lista_clientes, Lista *lista_carros, Lista *lista_locacoes) {
     int opcao;
     do {
@@ -190,6 +193,7 @@ void listar_meus_alugueis(Lista *lista_locacoes, int id_cliente) {
     if (!encontrou) printf("Voce ainda nao possui alugueis registrados.\n");
 }
 
+// ====================================================================
 void menu_cliente_logado(Cliente *cliente, Lista *lista_clientes, Lista *lista_carros, Lista *lista_locacoes) {
     int opcao;
     char subtitulo[114];
@@ -240,6 +244,7 @@ void menu_cliente_logado(Cliente *cliente, Lista *lista_clientes, Lista *lista_c
     } while (opcao != 0);
 }
 
+// ====================================================================
 void menu_login_cliente(Lista *lista_clientes, Lista *lista_carros, Lista *lista_locacoes) {
     int opcao;
     
@@ -344,6 +349,7 @@ void iniciar_sistema(Lista *lista_clientes, Lista *lista_carros, Lista *lista_lo
     } while (opcao != 0);
 }
 
+// ====================================================================
 void menu_pesquisa_clientes(Lista *lista_clientes) {
     char termo[100];
     int qtd_encontrada = 0;
@@ -369,7 +375,7 @@ void menu_pesquisa_clientes(Lista *lista_clientes) {
     }
 }
 
-
+// ====================================================================
 void menu_pesquisa_carros(Lista *lista_carros) {
     char termo[100];
     int qtd_encontrada = 0;
@@ -399,6 +405,7 @@ void menu_pesquisa_carros(Lista *lista_carros) {
     }
 }
 
+// ====================================================================
 void menu_pesquisa_locacoes(Lista *lista_locacoes) {
     char termo[100];
     int qtd_encontrada = 0;

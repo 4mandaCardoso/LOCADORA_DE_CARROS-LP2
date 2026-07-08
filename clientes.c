@@ -118,6 +118,7 @@ int validar_idade(Lista *lista_clientes, char *idade, int id_cliente_atual)
     return 1; // Passou em todas as verificações, idade é de fato apenas numeros
 }
 
+//CRUD: Função para cadastrar um novo cliente no sistema
 void cadastrar_cliente(Lista *lista_clientes)
 {
     Cliente *novo = (Cliente *) malloc(sizeof(Cliente));
@@ -128,7 +129,7 @@ void cadastrar_cliente(Lista *lista_clientes)
         return;
     }
 
-    novo->id = gerarID(TIPO_CLIENTE);
+    novo->id = gerarID(TIPO_CLIENTE); // Gera um ID único para o cliente, garantindo que não haja duplicatas no sistema
 
     printf("\n--- CADASTRAR CLIENTE ---\n");
 
@@ -159,7 +160,7 @@ void cadastrar_cliente(Lista *lista_clientes)
     do {
         if (erro_cpf > 0) {
             printf("\033[6A\033[J");
-            erro_cpf = 0; // Resetando o contador de erros para evitar loop infinito
+            erro_cpf = 0; // Resetando o contador de erros para evitar loop infinito e apagar quantidade de linhas erradas
         }
         
         printf("Digite seu CPF (apenas 11 digitos): ");
@@ -179,7 +180,7 @@ void cadastrar_cliente(Lista *lista_clientes)
     do{
         if (erro_idade > 0) {
             printf("\033[6A\033[J"); 
-            erro_idade = 0; // Resetando o contador de erros para evitar loop infinito
+            erro_idade = 0; // Resetando o contador de erros para evitar loop infinito e apagar quantidade de linhas erradas
         }
         
         printf("Digite sua idade: ");
@@ -199,7 +200,7 @@ void cadastrar_cliente(Lista *lista_clientes)
 }
 
 
-
+//CRUD: Função para listar todos os clientes cadastrados no sistema
 void listar_clientes(Lista *lista_clientes)
 {
     if (listaVazia(lista_clientes) == 1)
@@ -220,6 +221,7 @@ void listar_clientes(Lista *lista_clientes)
     printf("=====================================================================\n");
 }
 
+//CRUD: Função para buscar um cliente pelo CPF
 void buscar_cliente(Lista *lista_clientes)
 {
     if (listaVazia(lista_clientes) == 1)
@@ -247,6 +249,7 @@ void buscar_cliente(Lista *lista_clientes)
     }
 }
 
+//CRUD: Função para remover um cliente do sistema
 void remover_cliente(Lista *lista_clientes)
 {
     if (listaVazia(lista_clientes) == 1)
@@ -298,6 +301,7 @@ void remover_cliente(Lista *lista_clientes)
     }
 }
 
+//CRUD: Função para atualizar informações de um cliente no sistema
 void atualizar_cliente(Lista *lista_clientes)
 {
     if (listaVazia(lista_clientes) == 1)
@@ -329,6 +333,7 @@ void atualizar_cliente(Lista *lista_clientes)
         do {
             if (erro_nome > 0) {
                 printf("\033[6A\033[J"); // Sobe 6 linhas e limpa o rastro do erro
+                erro_nome = 0; // Resetando o contador de erros para evitar loop infinito e apagar quantidade de linhas erradas
             }
             
             printf("Digite o novo nome (atual: %s): ", cliente_atualizar->nome);
@@ -346,7 +351,8 @@ void atualizar_cliente(Lista *lista_clientes)
         int erro_cpf = 0;
         do {
             if (erro_cpf > 0) {
-                printf("\033[6A\033[J"); // Sobe 7 linhas e limpa o rastro do erro
+                printf("\033[6A\033[J"); // Sobe 6 linhas e limpa o rastro do erro
+                erro_cpf = 0; // Resetando o contador de erros para evitar loop infinito e apagar quantidade de linhas erradas
             }
             
             printf("Digite o novo CPF (atual: %s): ", cliente_atualizar->cpf);
@@ -364,7 +370,8 @@ void atualizar_cliente(Lista *lista_clientes)
         int erro_idade = 0;
         do {
             if (erro_idade > 0) {
-                printf("\033[6A\033[J"); // Sobe 7 linhas e limpa o rastro do erro
+                printf("\033[6A\033[J"); // Sobe 6 linhas e limpa o rastro do erro
+                erro_idade = 0; // Resetando o contador de erros para evitar loop infinito e apagar quantidade de linhas erradas
             }
             
             printf("Digite a nova idade (atual: %s): ", cliente_atualizar->idade);

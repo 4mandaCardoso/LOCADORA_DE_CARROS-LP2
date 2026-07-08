@@ -4,6 +4,7 @@
 #include <time.h>
 #include "locacao.h"
 
+// Funções auxiliares para buscar clientes, carros e locações por ID
 static Cliente *buscar_cliente_por_id(Lista *lista_clientes, int id) {
     if (lista_clientes == NULL) {
         return NULL;
@@ -20,6 +21,7 @@ static Cliente *buscar_cliente_por_id(Lista *lista_clientes, int id) {
     return NULL;
 }
 
+// Função auxiliar para buscar carros disponíveis
 static Carro *buscar_carro_por_id(Lista *lista_frota, int id) {
     if (lista_frota == NULL) {
         return NULL;
@@ -36,6 +38,7 @@ static Carro *buscar_carro_por_id(Lista *lista_frota, int id) {
     return NULL;
 }
 
+// Função auxiliar para contar carros disponíveis
 static int contar_carros_disponiveis(Lista *lista_frota) {
     if (lista_frota == NULL) {
         return 0;
@@ -53,6 +56,7 @@ static int contar_carros_disponiveis(Lista *lista_frota) {
     return contagem;
 }
 
+// Função auxiliar para buscar uma locação por ID
 static Aluguel *buscar_aluguel_por_id(Lista *historico, int id) {
     if (historico == NULL) {
         return NULL;
@@ -69,6 +73,7 @@ static Aluguel *buscar_aluguel_por_id(Lista *historico, int id) {
     return NULL;
 }
 
+// Função auxiliar para atualizar o status das locações com base no tempo atual
 static void atualizar_status_locacoes(Lista *historico) {
     if (historico == NULL) {
         return;
@@ -88,13 +93,14 @@ static void atualizar_status_locacoes(Lista *historico) {
     }
 }
 
+// Função para realizar uma locação
 void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frota, Cliente *cliente_logado) {
     if (historico == NULL || lista_clientes == NULL || lista_frota == NULL) {
         printf("Erro: Listas invalidas para realizar locacao.\n");
         return;
     }
 
-    int carros_disponiveis = contar_carros_disponiveis(lista_frota);
+    int carros_disponiveis = contar_carros_disponiveis(lista_frota); // Momento de contagem de carros disponíveis
     if (carros_disponiveis == 0) {
         printf("\nErro: Nenhum carro disponivel para locacao no momento. Tente mais tarde!\n");
         return; 
@@ -151,6 +157,7 @@ void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frot
         return;
     }
 
+    // Preenchemos todos os dados da locação e atualizamos o status do carro e da locação
     novo->id = gerarID(TIPO_ALUGUEL);
     novo->cliente_locador = cliente;
     novo->carro_alugado = carro;
@@ -162,9 +169,10 @@ void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frot
     novo->tempoDevolucao = novo->tempoRetirada + (time_t)dias * 24 * 3600;
     novo->status = STATUS_ATIVO;
 
+    // Preenchemos as strings de data e hora para exibição
     novo->tempoRetirada = time(NULL);
     struct tm tmInfo = *localtime(&novo->tempoRetirada); 
-    strftime(novo->dataHoraRetirada, TAM_DATA_HORA, "%d/%m/%Y %H:%M:%S", &tmInfo);
+    strftime(novo->dataHoraRetirada, TAM_DATA_HORA, "%d/%m/%Y %H:%M:%S", &tmInfo); 
 
     
     tmInfo.tm_mday += dias;                 
@@ -186,13 +194,14 @@ void realizar_locacao(Lista *historico, Lista *lista_clientes, Lista *lista_frot
 
 }
 
+// Função para realizar a devolução de um carro alugado
 void realizar_devolucao(Lista *historico, Cliente *cliente_logado) {
     if (historico == NULL || listaVazia(historico)) {
         printf("Nenhuma locacao registrada no sistema.\n");
         return;
     }
 
-    atualizar_status_locacoes(historico);
+    atualizar_status_locacoes(historico);// Atualiza o status das locações antes de listar ou encerrar qualquer uma
 
     // === BLOQUEIO VISUAL ===
     // verifica se ele tem algum aluguel ATIVO.
@@ -276,6 +285,7 @@ void listar_locacoes(Lista *historico) {
     }
 }
 
+// Função para salvar locações em arquivo binário
 void salvar_locacoes_bin(Lista *historico, const char *arquivo_bin) {
     if (historico == NULL || arquivo_bin == NULL) {
         return;
@@ -313,6 +323,7 @@ void salvar_locacoes_bin(Lista *historico, const char *arquivo_bin) {
     printf("Dados de locacoes salvos em '%s'.\n", arquivo_bin);
 }
 
+// Função para carregar locações de arquivo binário
 void carregar_locacoes_bin(Lista *historico, const char *arquivo_bin) {
     if (historico == NULL || arquivo_bin == NULL) {
         return;
@@ -336,6 +347,7 @@ void carregar_locacoes_bin(Lista *historico, const char *arquivo_bin) {
             break;
         }
 
+        // Preenchemos os dados da locação a partir do registro lido do arquivo
         aluguel->id = locar.id;
         aluguel->cliente_locador = NULL;
         aluguel->carro_alugado = NULL;
@@ -358,6 +370,7 @@ void carregar_locacoes_bin(Lista *historico, const char *arquivo_bin) {
     printf("Locacoes carregadas de '%s'.\n", arquivo_bin);
 }
 
+// Função para reconstruir as relações entre locações, clientes e carros após carregar os dados
 void reconstruir_relacoes_locacoes(Lista *historico, Lista *lista_clientes, Lista *lista_frota) {
     if (historico == NULL) {
         return;
@@ -377,6 +390,7 @@ void reconstruir_relacoes_locacoes(Lista *historico, Lista *lista_clientes, List
     }
 }
 
+// Função para verificar se um carro possui locações ativas ou encerradas
 int carro_possui_aluguel(Lista *historico, int id_carro) {
     if (historico == NULL || listaVazia(historico)) return 0;
     
